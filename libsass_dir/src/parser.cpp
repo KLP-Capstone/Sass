@@ -102,10 +102,12 @@ namespace Sass {
     // update final position
     root->update_pstate(pstate);
 
+    // error 없이 진행되었으면 position과 end가 같은 위치일 것임
     if (position != end) {
       css_error("Invalid CSS", " after ", ": expected selector or at-rule, was ");
     }
 
+    // root node return
     return root;
   }
 
@@ -120,15 +122,21 @@ namespace Sass {
     // lex < optional_css_comments >();
 
     // lex mandatory opener or error out
+    // '{' 찾아서 여기로 왔는데 '{'가 아니면 에러죠
     if (!lex_css < exactly<'{'> >()) {
       css_error("Invalid CSS", " after ", ": expected \"{\", was ");
     }
     // create new block and push to the selector stack
     Block_Obj block = SASS_MEMORY_NEW(Block, pstate, 0, is_root);
+
+    // left brace 이후로 새로운 블록이기 때문에 block stack에 block을 추가함
     block_stack.push_back(block);
 
+    // 여기서 parse_block_nodes()를 실행하면서 재귀적으로 lexing 및 parsing 진행
     if (!parse_block_nodes(is_root)) css_error("Invalid CSS", " after ", ": expected \"}\", was ");
 
+    // 위에서 실행한 parse_block_nodes가 끝나면 right brace에서 return되었을 것임.
+    // 그렇지 않으면 parsing error로 처리. block의 정의가 맞지 않기 때문.
     if (!lex_css < exactly<'}'> >()) {
       css_error("Invalid CSS", " after ", ": expected \"}\", was ");
     }
@@ -173,6 +181,7 @@ namespace Sass {
       if (peek < exactly<'}'> >()) return true;
 
       // parse tree의 한 statement에 대해서 파악
+      // 웬만하면 여기서 return true. lexing 계속해서 진행
       if (parse_block_node(is_root)) continue;
 
       parse_block_comments();
@@ -205,6 +214,7 @@ namespace Sass {
     // also parse block comments
 
     // first parse everything that is allowed in functions
+    // 맨처음 variable 처리
     if (lex < variable >(true)) { block->append(parse_assignment()); }
     else if (lex < kwd_err >(true)) { block->append(parse_error()); }
     else if (lex < kwd_dbg >(true)) { block->append(parse_debug()); }
@@ -293,6 +303,7 @@ namespace Sass {
     {
       // ToDo: how does it handle parse errors?
       // maybe we are expected to parse something?
+      // ##_Obj의 일종인 Declaration_Obj 선언
       Declaration_Obj decl = parse_declaration();
       decl->tabs(indentation);
       block->append(decl);
@@ -301,6 +312,9 @@ namespace Sass {
         if (decl->is_indented()) ++ indentation;
         // parse a propset that rides on the declaration's property
         stack.push_back(Scope::Properties);
+        // parse_block() 함수에서 parse_css_block()을 실행하고,
+        // parse_css_block()에서 parse_block_nodes()를 실행하면서 재귀적 호출
+        // left brace를 찾으면 right brace가 나올 때까지 진행. right brace가 나타나면 parse_block_nodes가 끝나면서 다시 여기로 돌아옴
         decl->block(parse_block());
         stack.pop_back();
         if (decl->is_indented()) -- indentation;

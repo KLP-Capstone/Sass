@@ -174,6 +174,7 @@ namespace Sass {
         // assertion that we got a valid match
         if (it_after_token == 0) return 0;
         // assertion that we actually lexed something
+        // 한 글자인 경우를 처리
         if (it_after_token == it_before_token) return 0;
       }
 
