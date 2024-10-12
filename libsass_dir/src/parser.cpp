@@ -170,10 +170,7 @@ namespace Sass {
       // lex에 exactly<';'>로 만들어진 함수의 pointer를 넣어서 실행 (parser.hpp)
       if (lex < exactly<';'> >()) continue;
       if (peek < end_of_file >()) return true;
-      if (peek < exactly<'}'> >()) {
-        std::cout << "굿굿굿" << std::endl;
-        return true;
-      }
+      if (peek < exactly<'}'> >()) return true;
 
       // parse tree의 한 statement에 대해서 파악
       if (parse_block_node(is_root)) continue;
