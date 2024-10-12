@@ -156,6 +156,7 @@ namespace Sass {
     catch (...) { return handle_error(c_ctx); }
   }
 
+  // root node만드는 애
   static Block_Obj sass_parse_block(Sass_Compiler* compiler) throw()
   {
 
@@ -166,7 +167,7 @@ namespace Sass {
     Sass_Context* c_ctx = compiler->c_ctx;
     // We will take care to wire up the rest
     compiler->cpp_ctx->c_compiler = compiler;
-    compiler->state = SASS_COMPILER_PARSED;
+    compiler->state = SASS_COMPILER_PARSED; // parsed 됐다고 state 변경
 
     try {
 
@@ -179,6 +180,7 @@ namespace Sass {
       bool skip = c_ctx->type == SASS_CONTEXT_DATA;
 
       // dispatch parse call
+      // cpp_ctx를 이용해 root node를 만들고 root 변수에 할당
       Block_Obj root(cpp_ctx->parse());
       // abort on errors
       if (!root) return {};
@@ -243,10 +245,13 @@ extern "C" {
 
 
   // generic compilation function (not exported, use file/data compile instead)
+  // c_ctx의 전처리, 사용자 지정함수, 사용자지정 헤더, 사용자지정 임포터 처리 후
+  // compiler변수를 만들어서 c_ctx, cpp_ctx 할당하고 compiler 리턴
   static Sass_Compiler* sass_prepare_context (Sass_Context* c_ctx, Context* cpp_ctx) throw()
   {
     try {
       // register our custom functions
+      // 사용자 정의 함수 처리
       if (c_ctx->c_functions) {
         auto this_func_data = c_ctx->c_functions;
         while (this_func_data && *this_func_data) {
@@ -256,6 +261,7 @@ extern "C" {
       }
 
       // register our custom headers
+      // 사용자 정의 헤더 처리
       if (c_ctx->c_headers) {
         auto this_head_data = c_ctx->c_headers;
         while (this_head_data && *this_head_data) {
@@ -265,6 +271,7 @@ extern "C" {
       }
 
       // register our custom importers
+      // import 전처리
       if (c_ctx->c_importers) {
         auto this_imp_data = c_ctx->c_importers;
         while (this_imp_data && *this_imp_data) {
@@ -288,7 +295,7 @@ extern "C" {
       void* ctxmem = calloc(1, sizeof(struct Sass_Compiler));
       if (ctxmem == 0) { std::cerr << "Error allocating memory for context" << std::endl; return 0; }
       Sass_Compiler* compiler = (struct Sass_Compiler*) ctxmem;
-      compiler->state = SASS_COMPILER_CREATED;
+      compiler->state = SASS_COMPILER_CREATED; // 만들었다 표시
 
       // store in sass compiler
       compiler->c_ctx = c_ctx;
@@ -312,11 +319,17 @@ extern "C" {
   {
 
     // prepare sass compiler with context and options
+    // sass context에 대한 전처리라고 추정
+    // c_ctx에 대한 전처리 후 compiler 변수에 c_ctx, cpp_ctx 할당
     Sass_Compiler* compiler = sass_prepare_context(c_ctx, cpp_ctx);
 
     try {
       // call each compiler step
+      // compiler의 root node를 만들어서 할당하고 파싱해서 자식노드까지 할당
+      // compiler의 state를 parsed로 변경
       sass_compiler_parse(compiler);
+
+      // compiler의 state를 executed로 변경
       sass_compiler_execute(compiler);
     }
     // pass errors to generic error handler
@@ -433,6 +446,7 @@ extern "C" {
     if (compiler->c_ctx->error_status)
       return compiler->c_ctx->error_status;
     // parse the context we have set up (file or data)
+    // compiler의 root에 root node 만들어서 할당함
     compiler->root = sass_parse_block(compiler);
     // success
     return 0;

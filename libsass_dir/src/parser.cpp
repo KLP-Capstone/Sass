@@ -84,6 +84,7 @@ namespace Sass {
     }
 
     // create a block AST node to hold children
+    // parse tree의 시작점이 되는 root 생성 (컴파일 시 딱 1번 만들어짐)
     Block_Obj root = SASS_MEMORY_NEW(Block, pstate, 0, true);
 
     // check seems a bit esoteric but works
@@ -93,6 +94,7 @@ namespace Sass {
     }
 
     // parse children nodes
+    // lexing, parsing 다함
     block_stack.push_back(root);
     parse_block_nodes(true);
     block_stack.pop_back();
@@ -154,20 +156,26 @@ namespace Sass {
 
   // the main block parsing function
   // parses stuff between `{` and `}`
+  // lexing하면서 parsing (lexing 다하고 parsing하는게 아님. lexing을 하면서 parsing을 같이 진행함)
   bool Parser::parse_block_nodes(bool is_root)
   {
-
+    //std::cout << "is_root: " << is_root << ", Hello World!" << std::endl;
     // loop until end of string
     while (position < end) {
-
       // we should be able to refactor this
       parse_block_comments();
       lex < css_whitespace >();
 
+      // 이 3줄은 statement의 종료를 확인해서 parse tree의 끝부분 결정 -> 자식노드 생성
+      // lex에 exactly<';'>로 만들어진 함수의 pointer를 넣어서 실행 (parser.hpp)
       if (lex < exactly<';'> >()) continue;
       if (peek < end_of_file >()) return true;
-      if (peek < exactly<'}'> >()) return true;
+      if (peek < exactly<'}'> >()) {
+        std::cout << "굿굿굿" << std::endl;
+        return true;
+      }
 
+      // parse tree의 한 statement에 대해서 파악
       if (parse_block_node(is_root)) continue;
 
       parse_block_comments();
@@ -283,6 +291,7 @@ namespace Sass {
       css_error("Invalid CSS", " after ", ": expected 1 selector or at-rule, was ");
     }
     // parse a declaration
+    // left brace와 right brace에 대한 처리가 recursive하게 이루어짐.
     else
     {
       // ToDo: how does it handle parse errors?
@@ -849,10 +858,18 @@ namespace Sass {
   {
     Block_Obj block = block_stack.back();
 
+    // scss의 comment 처리
+    // lex <>()값이 0이 아니면 lexed에 Token값이 할당됨(parser.hpp)
     while (lex< block_comment >()) {
+      // .begin은 before token
+      // 주석은 /* */ 이 형태인데 /*!~~~*/ 이걸 지금 찾고싶은거임
+      // !로 시작하는 주석은 압축할 때 없애지 않고 싶을 때 사용
       bool is_important = lexed.begin[2] == '!';
       // flag on second param is to skip loosely over comments
+      // comment 끝나는 부분 이상한점 처리
       String_Obj contents = parse_interpolated_chunk(lexed, true, false);
+
+      // class 동적할당하는 매크로 같은 느낌
       if (store) block->append(SASS_MEMORY_NEW(Comment, pstate, contents, is_important));
     }
   }

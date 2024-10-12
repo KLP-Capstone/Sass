@@ -302,6 +302,7 @@ namespace Sass {
     const char* optional_css_whitespace(const char* src) {
       return zero_plus< alternatives<spaces, line_comment> >(src);
     }
+    // space, line_comment가 없으면 0, 있으면 (그 위치 + 1) 포인터
     const char* css_whitespace(const char* src) {
       return one_plus< alternatives<spaces, line_comment> >(src);
     }
