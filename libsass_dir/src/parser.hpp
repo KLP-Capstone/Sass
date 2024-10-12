@@ -90,10 +90,11 @@ namespace Sass {
       const char* it_position = start ? start : position;
 
       // skip white-space?
+      // lexer에서 무시할 부분 다 넘어가는 코드
       if (mx == spaces ||
           mx == no_spaces ||
-          mx == css_comments ||
-          mx == css_whitespace ||
+          mx == css_comments || // 주석 넘어가기
+          mx == css_whitespace || // whitespace 넘어가기
           mx == optional_spaces ||
           mx == optional_css_comments ||
           mx == optional_css_whitespace
@@ -102,6 +103,7 @@ namespace Sass {
       }
 
       // skip over spaces, tabs and sass line comments
+      // it_position을 넣어서 space도 아니고, linecomment도 아니면 0(false) 반환
       const char* pos = optional_css_whitespace(it_position);
       // always return a valid position
       return pos ? pos : it_position;
@@ -141,11 +143,13 @@ namespace Sass {
     // we do not support start arg, since we manipulate
     // sourcemap offset and we modify the position pointer!
     // lex will only skip over space, tabs and line comment
+
+    // Prelexer::prelexer : const char*를 받아서 const char*를 반환하는 함수 포인터를 mx라는 이름으로 받음.
     template <Prelexer::prelexer mx>
     const char* lex(bool lazy = true, bool force = false)
     {
 
-      if (*position == 0) return 0;
+      if (*position == 0) return 0; // EOF 처리
 
       // position considered before lexed token
       // we can skip whitespace or comments for
@@ -154,6 +158,9 @@ namespace Sass {
 
       // sneak up to the actual token we want to lex
       // this should skip over white-space if desired
+
+      // position이 blank이면 it_before_token에 0 할당, 아니면 position 그대로 할당
+      // css_whitespace 같은 경우에는 그냥 그 position 그대로 return
       if (lazy) it_before_token = sneak < mx >(position);
 
       // now call matcher to get position after token
