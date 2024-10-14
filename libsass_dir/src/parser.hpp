@@ -174,11 +174,12 @@ namespace Sass {
         // assertion that we got a valid match
         if (it_after_token == 0) return 0;
         // assertion that we actually lexed something
-        // 한 글자인 경우를 처리
+        // lexing을 애초에 실패한 경우
         if (it_after_token == it_before_token) return 0;
       }
 
       // create new lexed token object (holds the parse results)
+      // lex 후 lexed에 Token을 집어넣음
       lexed = Token(position, it_before_token, it_after_token);
 
       // advance position (add whitespace before current token)

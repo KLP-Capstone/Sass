@@ -214,7 +214,7 @@ namespace Sass {
     // also parse block comments
 
     // first parse everything that is allowed in functions
-    // 맨처음 variable 처리
+    // variable 처리 ($로 시작하는 identifier, ex) $abcd: #1234에서 $abcd)
     if (lex < variable >(true)) { block->append(parse_assignment()); }
     else if (lex < kwd_err >(true)) { block->append(parse_error()); }
     else if (lex < kwd_dbg >(true)) { block->append(parse_debug()); }
@@ -244,7 +244,7 @@ namespace Sass {
       }
     }
 
-    else if (lex < kwd_extend >(true)) {
+    else if (lex < kwd_extend >(true)) { // extend keyword
       Lookahead lookahead = lookahead_for_include(position);
       if (!lookahead.found) css_error("Invalid CSS", " after ", ": expected selector, was ");
       SelectorListObj target;
@@ -282,7 +282,7 @@ namespace Sass {
     else if (lex < kwd_content_directive >(true)) { block->append(parse_content_directive()); }
     else if (lex < kwd_supports_directive >(true)) { block->append(parse_supports_directive()); }
     else if (lex < kwd_mixin >(true)) { block->append(parse_definition(Definition::MIXIN)); }
-    else if (lex < kwd_function >(true)) { block->append(parse_definition(Definition::FUNCTION)); }
+    else if (lex < kwd_function >(true)) { block->append(parse_definition(Definition::FUNCTION)); } // function annotation
 
     // ignore the @charset directive for now
     else if (lex< kwd_charset_directive >(true)) { parse_charset_directive(); }
@@ -885,14 +885,19 @@ namespace Sass {
     }
   }
 
+  // block 이름의 형태를 검사하여 block을 만드는 것
   Declaration_Obj Parser::parse_declaration() {
     String_Obj prop;
     bool is_custom_property = false;
+    // sequence: 안에 있는 내용들이 하나라도 맞지 않으면 0 return
+    // 0개 or 1개의 * -> identifier_schema인지 검사
     if (lex< sequence< optional< exactly<'*'> >, identifier_schema > >()) {
       const sass::string property(lexed);
+      // 커스텀 변수는 보통 --??? 이렇게 써서 0~2까지 --인지 확인
       is_custom_property = property.compare(0, 2, "--") == 0;
       prop = parse_identifier_schema();
     }
+    // 0개 or 1개의 * -> identifier 검사 -> comment가 있는지 검사
     else if (lex< sequence< optional< exactly<'*'> >, identifier, zero_plus< block_comment > > >()) {
       const sass::string property(lexed);
       is_custom_property = property.compare(0, 2, "--") == 0;
@@ -901,9 +906,12 @@ namespace Sass {
     else {
       css_error("Invalid CSS", " after ", ": expected \"}\", was ");
     }
-    bool is_indented = true;
+    bool is_indented = true; // sass 문법이라서 우리는 관여하지 않을 것
     const sass::string property(lexed);
+    //std::cout << "Hello, " << property << std::endl;
     if (!lex_css< one_plus< exactly<':'> > >()) error("property \"" + escape_string(property)  + "\" must be followed by a ':'");
+    // custom variable은 colon 뒤에 comment, semi colon 붙여도 되는데 non-custom variable은 불가능함
+    // ex) background-color: /* */; -> error,        --sadf: /* asdf */; -> non error
     if (!is_custom_property && match< sequence< optional_css_comments, exactly<';'> > >()) error("style declaration must contain a value");
     if (match< sequence< optional_css_comments, exactly<'{'> > >()) is_indented = false; // don't indent if value is empty
     if (is_custom_property) {
@@ -1622,6 +1630,7 @@ namespace Sass {
     String_Schema_Obj schema = SASS_MEMORY_NEW(String_Schema, pstate);
     sass::vector<char> brackets;
     while (true) {
+      // 상수 넣은 경우
       if (
         (brackets.empty() && lex< css_variable_top_level_value >(false)) ||
         (!brackets.empty() && lex< css_variable_value >(false))

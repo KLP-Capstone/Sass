@@ -468,6 +468,7 @@ namespace Sass {
     }
 
     // Match interpolant schemas
+    // '$' 0개 or 1개 -> identifier ->
     const char* identifier_schema(const char* src) {
 
       return sequence <
