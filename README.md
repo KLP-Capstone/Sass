@@ -1,3 +1,5 @@
+![images](https://github.com/user-attachments/assets/2e7e8fe1-b54a-4ea0-86d5-6b036f2795c9)
+
 Capstone(1): sass optimization을 위한 repository
 
 이 프로젝트는 기존에 존재하던 Libsass, sassc를 가져와 최적화하는 프로젝트임을 밝힘
