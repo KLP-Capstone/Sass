@@ -87,6 +87,7 @@ namespace Sass {
       using namespace Prelexer;
 
       // maybe use optional start position from arguments?
+      // 파라미터에 start값 안정해주면 start ? 가 false가 돼서 it_position에 position 할당
       const char* it_position = start ? start : position;
 
       // skip white-space?
@@ -103,7 +104,8 @@ namespace Sass {
       }
 
       // skip over spaces, tabs and sass line comments
-      // it_position을 넣어서 space도 아니고, linecomment도 아니면 0(false) 반환
+      // it_position을 파라미터로 넣어서, space와 line comment를 전부 다 넘어감.
+      // space, line feed가 없으면 it_position 그대로 리턴 / 있으면 다 넘어간 char pointer를 리턴
       const char* pos = optional_css_whitespace(it_position);
       // always return a valid position
       return pos ? pos : it_position;
