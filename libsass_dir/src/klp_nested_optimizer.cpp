@@ -1,6 +1,6 @@
 #include "sass.hpp"
 #include "sass_context.hpp"
 
-void sass_compiler_optimizer(Sass_Compiler *compiler) {
+void sass_compiler_optimization(Sass_Compiler *compiler) {
 
 }
