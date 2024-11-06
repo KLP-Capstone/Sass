@@ -267,6 +267,7 @@ namespace Sass {
     }
 
     // selector may contain interpolations which need delayed evaluation
+    // ruleset을 추가하는 부분
     else if (
       !(lookahead_result = lookahead_for_selector(position)).error &&
       !lookahead_result.is_custom_property
