@@ -1,0 +1,5 @@
+cd ./sassc_dir
+SASS_LIBSASS_PATH=../libsass_dir make
+cd ..
+./sassc_dir/bin/sassc input.scss output.css
+rm ./sassc_dir/bin/sassc
