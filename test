@@ -1,4 +1,6 @@
-cd ./sassc_dir
+cd ./libsass_dir 
+make clean
+cd ../sassc_dir
 SASS_LIBSASS_PATH=../libsass_dir make
 cd ..
 ./sassc_dir/bin/sassc input.scss output.css
