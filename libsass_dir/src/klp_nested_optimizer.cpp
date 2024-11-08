@@ -1,5 +1,6 @@
 #include "sass.hpp"
 #include "sass_context.hpp"
+#include "ast.hpp"
 
 #include <iostream>
 #include <fstream>
