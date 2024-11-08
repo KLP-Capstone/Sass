@@ -6,6 +6,15 @@
         "string": "cpp",
         "string_view": "cpp",
         "bitset": "cpp",
-        "stack": "cpp"
+        "stack": "cpp",
+        "__hash_table": "cpp",
+        "__tree": "cpp",
+        "array": "cpp",
+        "type_traits": "cpp",
+        "forward_list": "cpp",
+        "limits": "cpp",
+        "ratio": "cpp",
+        "tuple": "cpp",
+        "variant": "cpp"
     }
 }
