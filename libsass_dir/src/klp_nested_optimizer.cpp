@@ -22,8 +22,8 @@ namespace Sass{
                 q.push(root->get(i));
             }
             // root 자식 node의 내용 출력
-            ofs << "statement_type: " << child->statement_type() << endl;
-            ofs << "content: " << child->to_string() << endl;
+            ofs << "\"statement_type\": " << child->statement_type() << endl;
+            ofs << "\"content\": " << endl << child->to_string() << endl;
             ofs << endl;
         }
         
@@ -33,8 +33,8 @@ namespace Sass{
             q.pop();
 
             // 각 block마다 type, length 출력
-            ofs << "statement_type: " << obj->statement_type() << "\n";
-            ofs << "block length: " << block->length() << "\n";
+            ofs << "\"statement_type\": " << obj->statement_type() << "\n";
+            ofs << "\"block length\": " << endl << block->length() << "\n";
             ofs << endl;
 
             for(int i = 0 ; i < block->length() ; i++){
@@ -43,8 +43,8 @@ namespace Sass{
                     q.push(child);
                 }
                 // 자식 node 출력
-                ofs << "statement_type: " << child->statement_type() << endl;
-                ofs << "content: " << child->to_string() << endl;
+                ofs << "\"statement_type\": " << child->statement_type() << endl;
+                ofs << "\"content\": " << endl << child->to_string() << endl;
                 ofs << endl;
             }
 
