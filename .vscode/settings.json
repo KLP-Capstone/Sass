@@ -16,6 +16,8 @@
         "ratio": "cpp",
         "tuple": "cpp",
         "variant": "cpp",
-        "ostream": "cpp"
+        "ostream": "cpp",
+        "queue": "cpp",
+        "typeinfo": "cpp"
     }
 }

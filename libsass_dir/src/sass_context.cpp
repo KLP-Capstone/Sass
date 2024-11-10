@@ -167,6 +167,9 @@ namespace Sass {
     Context* cpp_ctx = compiler->cpp_ctx;
     Sass_Context* c_ctx = compiler->c_ctx;
     // We will take care to wire up the rest
+    // cpp_ctx가 output string을 가지고 있는 c_ctx로 접근하기 위해, c_ctx를 가지고 있는
+    // compiler를 cpp_ctx의 c_compiler로 저장
+    // -> cpp_ctx로 컴파일한 결과를 cpp_ctx -> c_compiler -> c_ctx로 들어가서 output string을 쓸수있다.
     compiler->cpp_ctx->c_compiler = compiler;
     compiler->state = SASS_COMPILER_PARSED; // parsed 됐다고 state 변경
 

@@ -13,10 +13,10 @@ namespace Sass{
         ofstream ofs("log.txt",ios::out | ios::app);
         if(!ofs.is_open()) return;
         // StyleRule_Obj를 담는 queue 생성
-        queue<StyleRule_Obj> q; 
-        for(int i = 0 ; i <root->length() ; i++){
+        queue<StyleRule_Obj> q;
+        for(int i = 0 ; i < root->length() ; i++){
             // 자식 가져오기
-            Block_Obj child = root->get(i);
+            Statement_Obj child = root->get(i);
             // ruleset이면 재귀적으로 탐색하기 위해 queue에 push
             if(child->statement_type() == Statement::RULESET){
                 q.push(root->get(i));
