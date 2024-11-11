@@ -541,11 +541,11 @@ namespace Sass {
     // then parse the inner block
     stack.push_back(Scope::Rules);
     // TODO : 자식 block의 selector를 부모 stylerule의 selector에 붙이는 방법 고안
-    // Block_Obj seudoBlock = parse_block();
-    // if(seudoBlock->length() == 1 && seudoBlock->get(0)->statement_type() == Statement::RULESET){
+    // Block_Obj pseudoBlock = parse_block();
+    // if(pseudoBlock->length() == 1 && pseudoBlock->get(0)->statement_type() == Statement::RULESET){
     //     //ruleset->selector()->append(ㅠ_ㅠ);
-    //     for(int i = 0 ; i < seudoBlock->length() ; i++){
-    //       ruleset->block()->append(seudoBlock->get(i));
+    //     for(int i = 0 ; i < pseudoBlock->length() ; i++){
+    //       ruleset->block()->append(pseudoBlock->get(i));
     //     }
     // }
     ruleset->block(parse_block());
