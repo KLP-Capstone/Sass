@@ -542,16 +542,19 @@ namespace Sass {
     // then parse the inner block
     stack.push_back(Scope::Rules);
     // TODO : 자식 block의 selector를 부모 stylerule의 selector에 붙이는 방법 고안
-    // Block_Obj pseudoBlock = parse_block();
-    // Statement* pseudoStmt = pseudoBlock->get(0);
-    // if(StyleRule_Obj pseudoStyle = dynamic_cast<StyleRule*>(pseudoStmt))
-    // if(pseudoBlock->length() == 1 && pseudoStmt->statement_type() == Statement::RULESET){
-    //   ruleset->selector()->append(pseudoStyle->selector());
-    //   for(int i = 0 ; i < pseudoBlock->length() ; i++){
-    //     ruleset->block()->append(pseudoBlock->get(i));
-    //   }
-    // }else 
-    ruleset->block(parse_block());
+    Block_Obj pseudoBlock = parse_block();
+    
+    if(pseudoBlock->length() == 1 && pseudoBlock->get(0)->statement_type() == Statement::RULESET){
+      Statement* pseudoStmt = pseudoBlock->get(0);
+      if(StyleRule_Obj pseudoStyle = dynamic_cast<StyleRule*>(pseudoStmt)){
+        ruleset->selector()->concat(pseudoStyle->selector());
+        pseudoStyle->selector()->clear();
+        for(int i = 0 ; i < pseudoBlock->length() ; i++){
+          ruleset->block()->append(pseudoBlock->get(i));
+        }
+        pseudoBlock->clear();
+      }
+    }else ruleset->block(pseudoBlock);
     stack.pop_back();
     // update for end position
     ruleset->update_pstate(pstate);
