@@ -551,7 +551,16 @@ namespace Sass {
       StyleRule_Obj child_rule=rule_stack.back();
       rule_stack.pop_back();
       
-      ruleset->selector()->concat(child_rule->selector());
+      std::cout<<"ruleset->selector->complex->selectorcomponent: "<<ruleset->selector()->get(0)->get(1)->to_string()<<std::endl;
+      
+      std::cout<<"ruleset selector: "<<ruleset->selector()->to_string()<<std::endl;
+      for(int i=0;i<ruleset->selector()->length();i++){
+        for(int j=0;j<child_rule->selector()->length();j++){
+          for(int k=0;k<child_rule->selector()->get(j)->length();k++){
+            ruleset->selector()->get(i)->append(child_rule->selector()->get(j)->get(k));
+          }
+        }
+      }
       ruleset->block(child_rule->block());
     }else {
       for(int i=0;i<pseudoBlock->length() ; i++){

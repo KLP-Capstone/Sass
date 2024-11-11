@@ -1,5 +1,5 @@
 cd ./libsass_dir 
-make clean
+make
 cd ../sassc_dir
 SASS_LIBSASS_PATH=../libsass_dir make
 cd ..
