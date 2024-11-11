@@ -10,7 +10,7 @@ namespace Sass{
     using namespace std;
     void sass_compiler_optimization(Sass_Compiler *compiler) {
         Block_Obj root = compiler->root;
-        ofstream ofs("log.txt",ios::out | ios::app);
+        ofstream ofs("log2.txt",ios::out | ios::app);
         if(!ofs.is_open()) return;
         // StyleRule_Obj를 담는 queue 생성
         queue<StyleRule_Obj> q;

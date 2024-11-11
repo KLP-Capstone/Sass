@@ -5,6 +5,7 @@
 #include "parser.hpp"
 #include "color_maps.hpp"
 #include "util_string.hpp"
+#include "expand.hpp"
 
 // Notes about delayed: some ast nodes can have delayed evaluation so
 // they can preserve their original semantics if needed. This is most
@@ -542,12 +543,14 @@ namespace Sass {
     stack.push_back(Scope::Rules);
     // TODO : 자식 block의 selector를 부모 stylerule의 selector에 붙이는 방법 고안
     // Block_Obj pseudoBlock = parse_block();
-    // if(pseudoBlock->length() == 1 && pseudoBlock->get(0)->statement_type() == Statement::RULESET){
-    //     //ruleset->selector()->append(ㅠ_ㅠ);
-    //     for(int i = 0 ; i < pseudoBlock->length() ; i++){
-    //       ruleset->block()->append(pseudoBlock->get(i));
-    //     }
-    // }
+    // Statement* pseudoStmt = pseudoBlock->get(0);
+    // if(StyleRule_Obj pseudoStyle = dynamic_cast<StyleRule*>(pseudoStmt))
+    // if(pseudoBlock->length() == 1 && pseudoStmt->statement_type() == Statement::RULESET){
+    //   ruleset->selector()->append(pseudoStyle->selector());
+    //   for(int i = 0 ; i < pseudoBlock->length() ; i++){
+    //     ruleset->block()->append(pseudoBlock->get(i));
+    //   }
+    // }else 
     ruleset->block(parse_block());
     stack.pop_back();
     // update for end position
