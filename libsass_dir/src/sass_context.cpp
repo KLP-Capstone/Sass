@@ -5,7 +5,6 @@
 
 #include "sass_functions.hpp"
 #include "json.hpp"
-#include "klp_nested_optimizer.cpp"
 
 #define LFEED "\n"
 
@@ -333,7 +332,6 @@ extern "C" {
       // compiler의 state를 parsed로 변경
       sass_compiler_parse(compiler);
 
-      sass_compiler_optimization(compiler);
       // compiler의 state를 executed로 변경
       sass_compiler_execute(compiler);
     }
