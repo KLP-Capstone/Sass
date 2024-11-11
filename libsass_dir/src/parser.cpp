@@ -552,9 +552,7 @@ namespace Sass {
       rule_stack.pop_back();
       
       ruleset->selector()->concat(child_rule->selector());
-      for(int i = 0 ; i < pseudoBlock->length() ; i++){
-        ruleset->block()->append(child_rule->block()->get(i));
-      }
+      ruleset->block(child_rule->block());
     }else {
       for(int i=0;i<pseudoBlock->length() ; i++){
         if(pseudoBlock->get(i)->statement_type() == Statement::RULESET){
