@@ -550,9 +550,10 @@ namespace Sass {
     if(pseudoBlock->length() == 1 && pseudoBlock->get(0)->statement_type() == Statement::RULESET){
       StyleRule_Obj child_rule=rule_stack.back();
       rule_stack.pop_back();
+      
       ruleset->selector()->concat(child_rule->selector());
       for(int i = 0 ; i < pseudoBlock->length() ; i++){
-        ruleset->block()->append(pseudoBlock->get(i));
+        ruleset->block()->append(child_rule->block()->get(i));
       }
     }else {
       for(int i=0;i<pseudoBlock->length() ; i++){
