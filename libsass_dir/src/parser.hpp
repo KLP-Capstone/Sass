@@ -42,6 +42,7 @@ namespace Sass {
 
     Context& ctx;
     sass::vector<Block_Obj> block_stack;
+    sass::vector<StyleRule_Obj> rule_stack;
     sass::vector<Scope> stack;
     SourceDataObj source;
     const char* begin;

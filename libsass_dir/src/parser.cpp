@@ -274,6 +274,8 @@ namespace Sass {
       !lookahead_result.is_custom_property
     )
     {
+      // rule_stack.push_back(parse_ruleset(lookahead_result));
+      // block->append(rule_stack.front());
       block->append(parse_ruleset(lookahead_result));
     }
 
@@ -521,6 +523,7 @@ namespace Sass {
   // a ruleset connects a selector and a block
   StyleRuleObj Parser::parse_ruleset(Lookahead lookahead)
   {
+
     NESTING_GUARD(nestings);
     // inherit is_root from parent block
     Block_Obj parent = block_stack.back();
@@ -545,16 +548,20 @@ namespace Sass {
     Block_Obj pseudoBlock = parse_block();
     
     if(pseudoBlock->length() == 1 && pseudoBlock->get(0)->statement_type() == Statement::RULESET){
-      Statement* pseudoStmt = pseudoBlock->get(0);
-      if(StyleRule_Obj pseudoStyle = dynamic_cast<StyleRule*>(pseudoStmt)){
-        ruleset->selector()->concat(pseudoStyle->selector());
-        pseudoStyle->selector()->clear();
-        for(int i = 0 ; i < pseudoBlock->length() ; i++){
-          ruleset->block()->append(pseudoBlock->get(i));
-        }
-        pseudoBlock->clear();
+      StyleRule_Obj child_rule=rule_stack.back();
+      rule_stack.pop_back();
+      ruleset->selector()->concat(child_rule->selector());
+      for(int i = 0 ; i < pseudoBlock->length() ; i++){
+        ruleset->block()->append(pseudoBlock->get(i));
       }
-    }else ruleset->block(pseudoBlock);
+    }else {
+      for(int i=0;i<pseudoBlock->length() ; i++){
+        if(pseudoBlock->get(i)->statement_type() == Statement::RULESET){
+          rule_stack.pop_back();
+        }
+      }
+      ruleset->block(pseudoBlock);
+    }
     stack.pop_back();
     // update for end position
     ruleset->update_pstate(pstate);
@@ -562,6 +569,7 @@ namespace Sass {
     // need this info for coherence checks
     ruleset->is_root(is_root);
     // return AST Node
+    rule_stack.push_back(ruleset);
     return ruleset;
   }
 
