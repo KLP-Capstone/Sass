@@ -5,6 +5,7 @@
 #include "parser.hpp"
 #include "color_maps.hpp"
 #include "util_string.hpp"
+#include "expand.hpp"
 
 // Notes about delayed: some ast nodes can have delayed evaluation so
 // they can preserve their original semantics if needed. This is most
@@ -273,6 +274,8 @@ namespace Sass {
       !lookahead_result.is_custom_property
     )
     {
+      // rule_stack.push_back(parse_ruleset(lookahead_result));
+      // block->append(rule_stack.front());
       block->append(parse_ruleset(lookahead_result));
     }
 
@@ -520,6 +523,7 @@ namespace Sass {
   // a ruleset connects a selector and a block
   StyleRuleObj Parser::parse_ruleset(Lookahead lookahead)
   {
+
     NESTING_GUARD(nestings);
     // inherit is_root from parent block
     Block_Obj parent = block_stack.back();
@@ -540,13 +544,52 @@ namespace Sass {
     }
     // then parse the inner block
     stack.push_back(Scope::Rules);
-    ruleset->block(parse_block());
+
+    // pseudoBlock : 현재 RuleSet의 brace'{}' 사이에 존재하는 큰 block
+    Block_Obj pseudoBlock = parse_block();
+    
+    // pseudoBlock->length() == 1 : ruleset 안에 block이 하나 존재
+    // pseudoBlock->get(0)->tatement_type() == Statement::RULESET : 하나 존재하는 block이 ruleset인 경우
+    // 두 조건을 만족하면 부모 RuleSet에 자식 RuleSet을 이어붙임
+    if(pseudoBlock->length() == 1 && pseudoBlock->get(0)->statement_type() == Statement::RULESET){
+      StyleRule_Obj child_rule=rule_stack.back();
+      rule_stack.pop_back(); // 자식 ruleset을 stack에서 제거
+      
+      ////////////////////////// Step 1: 부모의 Selector에 자식의 Selector를 이어붙이기 ////////////////////
+      // i는 0부터 부모 ruleset의 complex selector 개수만큼 돈다.
+      for(int i=0;i<ruleset->selector()->length();i++){
+        // j는 0부터 자식 ruleset의 complex selector 개수만큼 돈다.
+        for(int j=0;j<child_rule->selector()->length();j++){
+          // 자식의 각 complex selector 안에 comma로 나누어져있는 compound selector를 부모의 각 complex selector에 붙인다.
+          for(int k=0;k<child_rule->selector()->get(j)->length();k++){
+            // ruleset->selector()->get(i) : 부모의 i번째 Complex Selector
+            // child_rule->selector()->get(j)->get(k) : 자식의 j번째 Complex Selector 안에 존재하는 k번째 compound(또는 combinator)
+            ruleset->selector()->get(i)->append(child_rule->selector()->get(j)->get(k));
+          }
+        }
+      }
+      ////////////////////////// Step 2: 부모의 내부 Statement를 자식의 Statement 그대로 할당 ////////////////////
+      ruleset->block(child_rule->block());
+    }
+    // 줄일 것이 아니라면, RuleSet stack에서 Block 내부의 RuleSet 개수만큼 제거
+    // -> RuleSet에 pseudoBlock 할당
+    else {
+      for(int i=0;i<pseudoBlock->length() ; i++){
+        if(pseudoBlock->get(i)->statement_type() == Statement::RULESET){
+          rule_stack.pop_back();
+        }
+      }
+      ruleset->block(pseudoBlock);
+    }
     stack.pop_back();
     // update for end position
     ruleset->update_pstate(pstate);
     ruleset->block()->update_pstate(pstate);
     // need this info for coherence checks
     ruleset->is_root(is_root);
+
+    // 현재 만들어진 RuleSet을 stack에 push back 
+    rule_stack.push_back(ruleset);
     // return AST Node
     return ruleset;
   }

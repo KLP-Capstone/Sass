@@ -16,6 +16,8 @@ namespace Sass {
   Listize::Listize()
   {  }
 
+  // AST_Node를 상속하는 class의 polymorphism을 이용해 perform 처리
+  // 실제로 AST_Node에는 perform이 구현되어 있지 않음.
   Expression* Listize::perform(AST_Node* node)
   {
     Listize listize;

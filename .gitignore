@@ -32,10 +32,12 @@
 *.app
 
 # idea
-.idea
-.DS_Store
-.txt
-.sh
-.scss
-.sass
-.css
+*.idea
+*.DS_Store
+
+# for compile
+*.txt
+*.sh
+*.scss
+*.sass
+*.css
