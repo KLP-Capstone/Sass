@@ -7,7 +7,6 @@
 #include <iostream>
 #include <iomanip>
 #include <stdint.h>
-#include <stdint.h>
 
 #include "ast.hpp"
 #include "inspect.hpp"
