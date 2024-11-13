@@ -560,7 +560,7 @@ namespace Sass {
       for(int i=0;i<ruleset->selector()->length();i++){
         // j는 0부터 자식 ruleset의 complex selector 개수만큼 돈다.
         for(int j=0;j<child_rule->selector()->length();j++){
-          // 자식의 각 complex selector 안에 comma로 나누어져있는 compound selector를 부모의 각 complex selector에 붙인다.
+          // 자식의 각 complex selector 안에 white space로 나누어져있는 compound selector를 부모의 각 complex selector에 붙인다.
           for(int k=0;k<child_rule->selector()->get(j)->length();k++){
             // ruleset->selector()->get(i) : 부모의 i번째 Complex Selector
             // child_rule->selector()->get(j)->get(k) : 자식의 j번째 Complex Selector 안에 존재하는 k번째 compound(또는 combinator)
