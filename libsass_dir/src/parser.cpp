@@ -523,7 +523,7 @@ namespace Sass {
   // a ruleset connects a selector and a block
   StyleRuleObj Parser::parse_ruleset(Lookahead lookahead)
   {
-
+    
     NESTING_GUARD(nestings);
     // inherit is_root from parent block
     Block_Obj parent = block_stack.back();
@@ -553,23 +553,41 @@ namespace Sass {
     // 두 조건을 만족하면 부모 RuleSet에 자식 RuleSet을 이어붙임
     if(pseudoBlock->length() == 1 && pseudoBlock->get(0)->statement_type() == Statement::RULESET){
       StyleRule_Obj child_rule=rule_stack.back();
+
+      // &가 없을 때 사용할 SelectorList_Obj
+      SelectorList_Obj pseudoSel= SASS_MEMORY_NEW(SelectorList,pstate);
+      bool flag=false;
       rule_stack.pop_back(); // 자식 ruleset을 stack에서 제거
       
       ////////////////////////// Step 1: 부모의 Selector에 자식의 Selector를 이어붙이기 ////////////////////
       // i는 0부터 부모 ruleset의 complex selector 개수만큼 돈다.
       for(int i=0;i<ruleset->selector()->length();i++){
+        pseudoSel->append(ruleset->selector()->get(i));
         // j는 0부터 자식 ruleset의 complex selector 개수만큼 돈다.
         for(int j=0;j<child_rule->selector()->length();j++){
           // 자식의 각 complex selector 안에 white space로 나누어져있는 compound selector를 부모의 각 complex selector에 붙인다.
           for(int k=0;k<child_rule->selector()->get(j)->length();k++){
             // ruleset->selector()->get(i) : 부모의 i번째 Complex Selector
             // child_rule->selector()->get(j)->get(k) : 자식의 j번째 Complex Selector 안에 존재하는 k번째 compound(또는 combinator)
-            ruleset->selector()->get(i)->append(child_rule->selector()->get(j)->get(k));
+            if(child_rule->selector()->get(j)->get(k)->to_string()[0]=='&') {
+              flag=true;
+              break;
+            }
+
+            // ruleset->selector()->get(i)->append(child_rule->selector()->get(j)->get(k));
+            pseudoSel->get(i)->append(child_rule->selector()->get(j)->get(k));
+            std::cout<<"selector : "<<child_rule->selector()->get(j)->get(k)->to_string()<<std::endl;
           }
         }
       }
+      if(!flag){
+        ruleset->selector(pseudoSel);
+        ruleset->block(child_rule->block());
+      }else{
+        ruleset->block(pseudoBlock);
+        flag = false;
+      }
       ////////////////////////// Step 2: 부모의 내부 Statement를 자식의 Statement 그대로 할당 ////////////////////
-      ruleset->block(child_rule->block());
     }
     // 줄일 것이 아니라면, RuleSet stack에서 Block 내부의 RuleSet 개수만큼 제거
     // -> RuleSet에 pseudoBlock 할당
