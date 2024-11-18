@@ -569,17 +569,19 @@ namespace Sass {
           for(int k=0;k<child_rule->selector()->get(j)->length();k++){
             // ruleset->selector()->get(i) : 부모의 i번째 Complex Selector
             // child_rule->selector()->get(j)->get(k) : 자식의 j번째 Complex Selector 안에 존재하는 k번째 compound(또는 combinator)
-            if(child_rule->selector()->get(j)->get(k)->to_string()[0]=='&') {
+            if(child_rule->selector()->get(j)->get(k)->getCompound()->get(0)->name()[0] == '&') {
               flag=true;
-              break;
+              goto GOAT;
             }
 
             // ruleset->selector()->get(i)->append(child_rule->selector()->get(j)->get(k));
             pseudoSel->get(i)->append(child_rule->selector()->get(j)->get(k));
-            std::cout<<"selector : "<<child_rule->selector()->get(j)->get(k)->to_string()<<std::endl;
+            // std::cout<<"selector : "<<child_rule->selector()->get(j)->get(k)->to_string()<<std::endl;
           }
         }
       }
+      ////////////////////////// Step 2: 부모의 내부 Statement를 자식의 Statement 그대로 할당 ////////////////////
+    GOAT:
       if(!flag){
         ruleset->selector(pseudoSel);
         ruleset->block(child_rule->block());
@@ -587,7 +589,6 @@ namespace Sass {
         ruleset->block(pseudoBlock);
         flag = false;
       }
-      ////////////////////////// Step 2: 부모의 내부 Statement를 자식의 Statement 그대로 할당 ////////////////////
     }
     // 줄일 것이 아니라면, RuleSet stack에서 Block 내부의 RuleSet 개수만큼 제거
     // -> RuleSet에 pseudoBlock 할당
