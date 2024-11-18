@@ -523,7 +523,7 @@ namespace Sass {
   // a ruleset connects a selector and a block
   StyleRuleObj Parser::parse_ruleset(Lookahead lookahead)
   {
-
+    
     NESTING_GUARD(nestings);
     // inherit is_root from parent block
     Block_Obj parent = block_stack.back();
@@ -553,10 +553,32 @@ namespace Sass {
     // 두 조건을 만족하면 부모 RuleSet에 자식 RuleSet을 이어붙임
     if(pseudoBlock->length() == 1 && pseudoBlock->get(0)->statement_type() == Statement::RULESET){
       StyleRule_Obj child_rule=rule_stack.back();
+
+      // &가 없을 때 사용할 SelectorList_Obj
+      SelectorList_Obj pseudoSel= SASS_MEMORY_NEW(SelectorList,pstate);
+      bool flag=false;
       rule_stack.pop_back(); // 자식 ruleset을 stack에서 제거
       
       int child_node_size = child_rule->selector()->length();
       int ruleset_node_size = ruleset->selector()->length();
+      ///////// 자식 selector에 & 연산자가 존재하는지 check ////////
+      for(int i=0;i<child_node_size;i++){
+        for(int j=0;j<child_rule->selector()->get(i)->length();j++){
+          // combinator 건너뛰기
+          if(child_rule->selector()->get(i)->get(j)->getCombinator() != NULL) continue;
+          // &만 있는거 찾기 : i번째 complex의 j번째 compound가 &이면 length가 0으로 나옴
+          if(child_rule->selector()->get(i)->get(j)->getCompound()->length() == 0){
+            flag = true;
+            goto GOAT;
+          }
+          // & 뒤에 이름 붙는 것 찾기 (&a 등)
+          else if(child_rule->selector()->get(i)->get(j)->getCompound()->to_string()[0] == '&'){
+            flag = true;
+            goto GOAT;
+          }
+        }
+      }
+
       /// 부모 selector list에 각각의 complex를 자식 complex개수로 복사
       for(int i=0;i<child_node_size-1;i++){
         for(int j=0;j<ruleset_node_size;j++){
@@ -576,7 +598,12 @@ namespace Sass {
         }
       }
       ////////////////////////// Step 2: 부모의 내부 Statement를 자식의 Statement 그대로 할당 ////////////////////
-      ruleset->block(child_rule->block());
+    GOAT:  
+      if(!flag){
+        ruleset->block(child_rule->block());
+      }else{
+        ruleset->block(pseudoBlock);
+      }
     }
     // 줄일 것이 아니라면, RuleSet stack에서 Block 내부의 RuleSet 개수만큼 제거
     // -> RuleSet에 pseudoBlock 할당
