@@ -561,6 +561,24 @@ namespace Sass {
       
       int child_node_size = child_rule->selector()->length();
       int ruleset_node_size = ruleset->selector()->length();
+      ///////// 자식 selector에 & 연산자가 존재하는지 check ////////
+      for(int i=0;i<child_node_size;i++){
+        for(int j=0;j<child_rule->selector()->get(i)->length();j++){
+          // combinator 건너뛰기
+          if(child_rule->selector()->get(i)->get(j)->getCombinator() != NULL) continue;
+          // &만 있는거 찾기 : i번째 complex의 j번째 compound가 &이면 length가 0으로 나옴
+          if(child_rule->selector()->get(i)->get(j)->getCompound()->length() == 0){
+            flag = true;
+            goto GOAT;
+          }
+          // & 뒤에 이름 붙는 것 찾기 (&a 등)
+          else if(child_rule->selector()->get(i)->get(j)->getCompound()->to_string()[0] == '&'){
+            flag = true;
+            goto GOAT;
+          }
+        }
+      }
+
       /// 부모 selector list에 각각의 complex를 자식 complex개수로 복사
       for(int i=0;i<child_node_size-1;i++){
         for(int j=0;j<ruleset_node_size;j++){
@@ -580,12 +598,11 @@ namespace Sass {
         }
       }
       ////////////////////////// Step 2: 부모의 내부 Statement를 자식의 Statement 그대로 할당 ////////////////////
+    GOAT:  
       if(!flag){
-        ruleset->selector(pseudoSel);
         ruleset->block(child_rule->block());
       }else{
         ruleset->block(pseudoBlock);
-        flag = false;
       }
     }
     // 줄일 것이 아니라면, RuleSet stack에서 Block 내부의 RuleSet 개수만큼 제거
