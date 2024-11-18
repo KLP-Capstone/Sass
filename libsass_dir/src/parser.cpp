@@ -555,16 +555,23 @@ namespace Sass {
       StyleRule_Obj child_rule=rule_stack.back();
       rule_stack.pop_back(); // 자식 ruleset을 stack에서 제거
       
+      int child_node_size = child_rule->selector()->length();
+      int ruleset_node_size = ruleset->selector()->length();
+      /// 부모 selector list에 각각의 complex를 자식 complex개수로 복사
+      for(int i=0;i<child_node_size-1;i++){
+        for(int j=0;j<ruleset_node_size;j++){
+          ComplexSelector_Obj new_complex = SASS_MEMORY_CLONE(ruleset->selector()->get(j));
+          ruleset->selector()->append(new_complex);
+        }
+      }
       ////////////////////////// Step 1: 부모의 Selector에 자식의 Selector를 이어붙이기 ////////////////////
-      // i는 0부터 부모 ruleset의 complex selector 개수만큼 돈다.
-      for(int i=0;i<ruleset->selector()->length();i++){
-        // j는 0부터 자식 ruleset의 complex selector 개수만큼 돈다.
-        for(int j=0;j<child_rule->selector()->length();j++){
-          // 자식의 각 complex selector 안에 white space로 나누어져있는 compound selector를 부모의 각 complex selector에 붙인다.
-          for(int k=0;k<child_rule->selector()->get(j)->length();k++){
-            // ruleset->selector()->get(i) : 부모의 i번째 Complex Selector
-            // child_rule->selector()->get(j)->get(k) : 자식의 j번째 Complex Selector 안에 존재하는 k번째 compound(또는 combinator)
-            ruleset->selector()->get(i)->append(child_rule->selector()->get(j)->get(k));
+      // i : 자식 complex selector number
+      for(int i=0;i<child_node_size;i++){
+        // j : 부모 complex selector number
+        for(int j=0;j<ruleset_node_size;j++){
+          // k : 자식의 i번째 complex selector의 compound selector number
+          for(int k=0;k<child_rule->selector()->get(i)->length();k++){
+            ruleset->selector()->get(i * ruleset_node_size + j)->append(child_rule->selector()->get(i)->get(k));
           }
         }
       }
