@@ -29,11 +29,11 @@ namespace Sass {
       add_open_mapping(block);
       append_scope_opener();
     }
-    if (output_style() == NESTED) indentation += block->tabs();
+    //if (output_style() == NESTED) indentation += block->tabs();
     for (size_t i = 0, L = block->length(); i < L; ++i) {
       (*block)[i]->perform(this);
     }
-    if (output_style() == NESTED) indentation -= block->tabs();
+    //if (output_style() == NESTED) indentation -= block->tabs();
     if (!block->is_root()) {
       append_scope_closer();
       add_close_mapping(block);
@@ -78,8 +78,7 @@ namespace Sass {
 
   void Inspect::operator()(CssMediaRule* rule)
   {
-    if (output_style() == NESTED)
-      indentation += rule->tabs();
+    //if (output_style() == NESTED) indentation += rule->tabs();
     append_indentation();
     append_token("@media", rule);
     append_mandatory_space();
@@ -97,8 +96,7 @@ namespace Sass {
       rule->block()->perform(this);
     }
     in_media_block = false;
-    if (output_style() == NESTED)
-      indentation -= rule->tabs();
+    //if (output_style() == NESTED) indentation -= rule->tabs();
   }
 
   void Inspect::operator()(CssMediaQuery* query)
@@ -171,8 +169,7 @@ namespace Sass {
     in_declaration = true;
     LOCAL_FLAG(in_custom_property, dec->is_custom_property());
 
-    if (output_style() == NESTED)
-      indentation += dec->tabs();
+    //if (output_style() == NESTED) indentation += dec->tabs();
     append_indentation();
     if (dec->property())
       dec->property()->perform(this);
@@ -190,8 +187,7 @@ namespace Sass {
       append_string("!important");
     }
     append_delimiter();
-    if (output_style() == NESTED)
-      indentation -= dec->tabs();
+    //if (output_style() == NESTED) indentation -= dec->tabs();
     in_declaration = was_decl;
   }
 
