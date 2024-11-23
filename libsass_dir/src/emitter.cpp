@@ -286,8 +286,12 @@ namespace Sass {
     } else {
       append_optional_space();
     }
+    // 다른 ruleset과 구분하기 위해 linefeed
     append_string("\n");
+    // @media 등 ruleset의 계층구조가 남아있을 시 내부 Ruleset에서 indentation 추가 적용
+    // Global Scope인 경우에는 indentation값이 0이므로 없는 코드와 동일함.
     append_indentation();
+    // right brace 추가
     append_string("}");
     if (node) add_close_mapping(node);
     append_optional_linefeed();
