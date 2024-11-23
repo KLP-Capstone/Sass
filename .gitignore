@@ -41,3 +41,7 @@
 *.scss
 *.sass
 *.css
+
+# no ignore
+!testcase/*.scss
+!testcase/*.css

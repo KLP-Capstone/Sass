@@ -1,0 +1,3406 @@
+// ==========================================
+// Variables
+// ==========================================
+
+// Color Variables
+$primary-color: #3498db;
+$secondary-color: #2ecc71;
+$accent-color: #e74c3c;
+$background-color: #f5f5f5;
+$text-color: #333333;
+$border-color: #dddddd;
+
+// Font Variables
+$base-font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+$heading-font-family: 'Georgia', serif;
+$base-font-size: 16px;
+$line-height: 1.5;
+
+// Spacing Variables
+$small-spacing: 8px;
+$medium-spacing: 16px;
+$large-spacing: 24px;
+
+// Breakpoints
+$breakpoint-mobile: 480px;
+$breakpoint-tablet: 768px;
+$breakpoint-desktop: 1024px;
+
+// ==========================================
+// Mixins
+// ==========================================
+
+// Mixin for Flex Centering
+@mixin flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+// Mixin for Box Shadow
+@mixin box-shadow($x, $y, $blur, $color) {
+  -webkit-box-shadow: $x $y $blur $color;
+  -moz-box-shadow: $x $y $blur $color;
+  box-shadow: $x $y $blur $color;
+}
+
+// Mixin for Transition
+@mixin transition($property, $duration, $timing) {
+  transition: $property $duration $timing;
+  -webkit-transition: $property $duration $timing;
+  -moz-transition: $property $duration $timing;
+  -o-transition: $property $duration $timing;
+}
+
+// Mixin for Media Queries
+@mixin respond-to($breakpoint) {
+  @if $breakpoint == mobile {
+    @media (max-width: $breakpoint-mobile) {
+      @content;
+    }
+  }
+  @else if $breakpoint == tablet {
+    @media (min-width: ($breakpoint-mobile + 1)) and (max-width: $breakpoint-tablet) {
+      @content;
+    }
+  }
+  @else if $breakpoint == desktop {
+    @media (min-width: ($breakpoint-tablet + 1)) {
+      @content;
+    }
+  }
+}
+
+// Mixin for Clearfix
+@mixin clearfix {
+  &::after {
+    content: "";
+    display: table;
+    clear: both;
+  }
+}
+
+// ==========================================
+// Base Styles
+// ==========================================
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: $base-font-family;
+  font-size: $base-font-size;
+  line-height: $line-height;
+  color: $text-color;
+  background-color: $background-color;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: $heading-font-family;
+  margin: 0 0 $small-spacing 0;
+  color: darken($primary-color, 10%);
+}
+
+p {
+  margin: 0 0 $medium-spacing 0;
+}
+
+a {
+  color: $primary-color;
+  text-decoration: none;
+
+
+  &:hover {
+    color: darken($primary-color, 15%);
+  }
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+ul,
+ol {
+  margin: 0 0 $medium-spacing 0;
+  padding: 0 0 0 $medium-spacing;
+}
+
+li {
+  margin-bottom: $small-spacing;
+}
+
+// ==========================================
+// Layout
+// ==========================================
+
+.container {
+  width: 90%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: $medium-spacing;
+  background-color: #ffffff;
+  @include clearfix;
+
+  @include respond-to(mobile) {
+    width: 100%;
+    padding: $small-spacing;
+  }
+}
+
+.header {
+  background-color: $primary-color;
+  color: #ffffff;
+  padding: $medium-spacing 0;
+
+  .logo {
+    font-size: 1.5rem;
+    font-weight: bold;
+    @include flex-center;
+  }
+
+  .navigation {
+    ul {
+      list-style: none;
+      display: flex;
+      justify-content: flex-end;
+      margin: 0;
+
+      li {
+        margin-left: $large-spacing;
+
+        a {
+          color: #ffffff;
+          font-weight: bold;
+
+          &:hover {
+            color: darken($primary-color, 20%);
+          }
+        }
+      }
+    }
+
+    @include respond-to(mobile) {
+      ul {
+        flex-direction: column;
+        align-items: center;
+
+        li {
+          margin: $small-spacing 0;
+        }
+      }
+    }
+  }
+
+  @include respond-to(mobile) {
+    .navigation {
+      ul {
+        flex-direction: column;
+      }
+    }
+  }
+}
+
+.footer {
+  background-color: $secondary-color;
+  color: #ffffff;
+  padding: $medium-spacing 0;
+  text-align: center;
+
+  p {
+    margin: 0;
+  }
+}
+
+// ==========================================
+// Typography
+// ==========================================
+
+.typography {
+  .title {
+    font-size: 2rem;
+    margin-bottom: $small-spacing;
+    color: $primary-color;
+  }
+
+  .subtitle {
+    font-size: 1.5rem;
+    margin-bottom: $medium-spacing;
+    color: darken($secondary-color, 10%);
+  }
+
+  .lead {
+    font-size: 1.2rem;
+    font-weight: 300;
+    margin-bottom: $large-spacing;
+  }
+
+  .muted {
+    color: $border-color;
+  }
+}
+
+// ==========================================
+// Buttons
+// ==========================================
+
+.button {
+  display: inline-block;
+  padding: $small-spacing $medium-spacing;
+  font-size: 1rem;
+  font-weight: bold;
+  text-align: center;
+  border: 2px solid transparent;
+  border-radius: 4px;
+  cursor: pointer;
+  text-decoration: none;
+
+  &--primary {
+    background-color: $primary-color;
+    color: #ffffff;
+    border-color: $primary-color;
+
+    &:hover {
+      background-color: darken($primary-color, 10%);
+      border-color: darken($primary-color, 10%);
+    }
+  }
+
+  &--secondary {
+    background-color: transparent;
+    color: $secondary-color;
+    border-color: $secondary-color;
+
+    &:hover {
+      background-color: $secondary-color;
+      color: #ffffff;
+    }
+  }
+
+  &--accent {
+    background-color: $accent-color;
+    color: #ffffff;
+    border-color: $accent-color;
+
+    &:hover {
+      background-color: darken($accent-color, 10%);
+      border-color: darken($accent-color, 10%);
+    }
+  }
+}
+
+// ==========================================
+// Forms
+// ==========================================
+
+.form {
+  &__group {
+    margin-bottom: $medium-spacing;
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__label {
+    margin-bottom: $small-spacing;
+    font-weight: bold;
+    color: $text-color;
+  }
+
+  &__input,
+  &__textarea,
+  &__select {
+    padding: $small-spacing;
+    border: 1px solid $border-color;
+    border-radius: 4px;
+    font-size: 1rem;
+
+    &:focus {
+      border-color: $primary-color;
+      outline: none;
+    }
+  }
+
+  &__button {
+    @extend .button;
+    @extend .button--primary;
+  }
+
+  &__error {
+    color: $accent-color;
+    font-size: 0.9rem;
+    margin-top: $small-spacing;
+  }
+}
+
+// ==========================================
+// Cards
+// ==========================================
+
+.card {
+  background-color: #ffffff;
+  border: 1px solid $border-color;
+  border-radius: 4px;
+  padding: $medium-spacing;
+  margin-bottom: $large-spacing;
+
+  &__header {
+    font-size: 1.5rem;
+    margin-bottom: $small-spacing;
+    color: $primary-color;
+  }
+
+  &__body {
+    font-size: 1rem;
+    color: $text-color;
+    margin-bottom: $medium-spacing;
+  }
+
+  &__footer {
+    text-align: right;
+  }
+}
+
+// ==========================================
+// Navigation
+// ==========================================
+
+.navbar {
+  background-color: $primary-color;
+  padding: $medium-spacing 0;
+
+  .navbar__brand {
+    font-size: 1.5rem;
+    color: #ffffff;
+    font-weight: bold;
+    text-decoration: none;
+
+    &:hover {
+      color: darken($primary-color, 10%);
+    }
+  }
+
+  .navbar__menu {
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+
+    li {
+      margin-left: $large-spacing;
+
+      a {
+        color: #ffffff;
+        text-decoration: none;
+        font-weight: bold;
+
+        &:hover {
+          color: darken($primary-color, 15%);
+        }
+      }
+    }
+
+    @include respond-to(mobile) {
+      flex-direction: column;
+      align-items: center;
+
+      li {
+        margin: $small-spacing 0;
+      }
+    }
+  }
+
+  @include respond-to(mobile) {
+    .navbar__menu {
+      flex-direction: column;
+      align-items: center;
+    }
+  }
+}
+
+// ==========================================
+// Buttons with Variants
+// ==========================================
+
+.btn {
+  display: inline-block;
+  padding: $small-spacing $medium-spacing;
+  font-size: 1rem;
+  font-weight: bold;
+  text-align: center;
+  border: 2px solid transparent;
+  border-radius: 4px;
+  cursor: pointer;
+  text-decoration: none;
+
+  &--primary {
+    background-color: $primary-color;
+    color: #ffffff;
+    border-color: $primary-color;
+
+    &:hover {
+      background-color: darken($primary-color, 10%);
+      border-color: darken($primary-color, 10%);
+    }
+  }
+
+  &--secondary {
+    background-color: transparent;
+    color: $secondary-color;
+    border-color: $secondary-color;
+
+    &:hover {
+      background-color: $secondary-color;
+      color: #ffffff;
+    }
+  }
+
+  &--accent {
+    background-color: $accent-color;
+    color: #ffffff;
+    border-color: $accent-color;
+
+    &:hover {
+      background-color: darken($accent-color, 10%);
+      border-color: darken($accent-color, 10%);
+    }
+  }
+
+  &--disabled {
+    background-color: #cccccc;
+    color: #666666;
+    border-color: #cccccc;
+    cursor: not-allowed;
+
+    &:hover {
+      background-color: #cccccc;
+      border-color: #cccccc;
+      color: #666666;
+    }
+  }
+}
+
+// ==========================================
+// Tables
+// ==========================================
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: $large-spacing;
+
+  th,
+  td {
+    padding: $small-spacing;
+    border: 1px solid $border-color;
+    text-align: left;
+  }
+
+  th {
+    background-color: $primary-color;
+    color: #ffffff;
+  }
+
+  tr:nth-child(even) {
+    background-color: #f9f9f9;
+  }
+
+  tr:hover {
+    background-color: #f1f1f1;
+  }
+}
+
+// ==========================================
+// Alerts
+// ==========================================
+
+.alert {
+  padding: $medium-spacing;
+  border-radius: 4px;
+  margin-bottom: $large-spacing;
+  font-weight: bold;
+
+  &--success {
+    background-color: $secondary-color;
+    color: #ffffff;
+
+    &:hover {
+      background-color: darken($secondary-color, 10%);
+    }
+  }
+
+  &--error {
+    background-color: $accent-color;
+    color: #ffffff;
+
+    &:hover {
+      background-color: darken($accent-color, 10%);
+    }
+  }
+
+  &--warning {
+    background-color: #f1c40f;
+    color: #ffffff;
+
+    &:hover {
+      background-color: darken(#f1c40f, 10%);
+    }
+  }
+
+  &--info {
+    background-color: #2980b9;
+    color: #ffffff;
+
+    &:hover {
+      background-color: darken(#2980b9, 10%);
+    }
+  }
+}
+
+// ==========================================
+// Modals
+// ==========================================
+
+.modal {
+  display: none; // Hidden by default
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.5);
+  @include flex-center;
+
+  &__content {
+    background-color: #ffffff;
+    padding: $large-spacing;
+    border-radius: 4px;
+    width: 80%;
+    max-width: 500px;
+    position: relative;
+
+    &:hover {
+      transform: translateY(-5px);
+    }
+  }
+
+  &__header {
+    font-size: 1.5rem;
+    margin-bottom: $medium-spacing;
+    color: $primary-color;
+  }
+
+  &__body {
+    font-size: 1rem;
+    color: $text-color;
+    margin-bottom: $medium-spacing;
+  }
+
+  &__footer {
+    text-align: right;
+
+    .btn {
+      margin-left: $small-spacing;
+    }
+  }
+
+  &--active {
+    display: flex;
+  }
+}
+
+// ==========================================
+// Tooltips
+// ==========================================
+
+.tooltip {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+
+  &__text {
+    visibility: hidden;
+    width: 120px;
+    background-color: $text-color;
+    color: #ffffff;
+    text-align: center;
+    border-radius: 6px;
+    padding: $small-spacing 0;
+    position: absolute;
+    z-index: 1001;
+    bottom: 125%;
+    left: 50%;
+    margin-left: -60px;
+    opacity: 0;
+    transition: opacity 0.3s;
+
+    &::after {
+      content: "";
+      position: absolute;
+      top: 100%; /* At the bottom of the tooltip */
+      left: 50%;
+      margin-left: -5px;
+      border-width: 5px;
+      border-style: solid;
+      border-color: $text-color transparent transparent transparent;
+    }
+  }
+
+  &:hover &__text {
+    visibility: visible;
+    opacity: 1;
+  }
+}
+
+// ==========================================
+// Pagination
+// ==========================================
+
+.pagination {
+  display: flex;
+  list-style: none;
+  padding: 0;
+  margin: $medium-spacing 0;
+  justify-content: center;
+
+  li {
+    margin: 0 $small-spacing;
+    
+    a {
+      padding: $small-spacing $medium-spacing;
+      border: 1px solid $border-color;
+      border-radius: 4px;
+      color: $primary-color;
+      text-decoration: none;
+
+      &:hover {
+        background-color: $primary-color;
+        color: #ffffff;
+      }
+
+      &.active {
+        background-color: $primary-color;
+        color: #ffffff;
+        border-color: $primary-color;
+        cursor: default;
+      }
+    }
+  }
+}
+
+// ==========================================
+// Tabs
+// ==========================================
+
+.tabs {
+  display: flex;
+  border-bottom: 2px solid $border-color;
+  margin-bottom: $medium-spacing;
+
+  .tab {
+    padding: $small-spacing $medium-spacing;
+    cursor: pointer;
+
+    &:hover {
+      color: darken($primary-color, 10%);
+    }
+
+    &.active {
+      border-bottom: 2px solid $primary-color;
+      color: $primary-color;
+      font-weight: bold;
+    }
+  }
+}
+
+.tab-content {
+  .tab-pane {
+    display: none;
+
+    &.active {
+      display: block;
+    }
+  }
+}
+
+// ==========================================
+// Accordions
+// ==========================================
+
+.accordion {
+  border: 1px solid $border-color;
+  border-radius: 4px;
+  margin-bottom: $medium-spacing;
+
+  .accordion__item {
+    border-bottom: 1px solid $border-color;
+
+    &:last-child {
+      border-bottom: none;
+    }
+
+    .accordion__header {
+      padding: $medium-spacing;
+      background-color: $background-color;
+      cursor: pointer;
+      position: relative;
+      @include flex-center;
+      justify-content: space-between;
+
+      &:hover {
+        background-color: darken($background-color, 5%);
+      }
+
+      &::after {
+        content: '+';
+        font-size: 1.2rem;
+        position: absolute;
+        right: $medium-spacing;
+        transition: transform 0.3s;
+      }
+
+      &.active::after {
+        transform: rotate(45deg);
+      }
+    }
+
+    .accordion__body {
+      padding: $medium-spacing;
+      display: none;
+      background-color: #ffffff;
+    }
+
+    &.active {
+      .accordion__body {
+        display: block;
+      }
+
+      .accordion__header::after {
+        transform: rotate(45deg);
+      }
+    }
+  }
+}
+
+// ==========================================
+// Badges
+// ==========================================
+
+.badge {
+  display: inline-block;
+  padding: 0.25em 0.4em;
+  font-size: 75%;
+  font-weight: 700;
+  line-height: 1;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: baseline;
+  border-radius: 0.25rem;
+  color: #ffffff;
+
+  &--primary {
+    background-color: $primary-color;
+  }
+
+  &--secondary {
+    background-color: $secondary-color;
+  }
+
+  &--accent {
+    background-color: $accent-color;
+  }
+
+  &--success {
+    background-color: $secondary-color;
+  }
+
+  &--error {
+    background-color: $accent-color;
+  }
+
+  &--warning {
+    background-color: #f1c40f;
+  }
+
+  &--info {
+    background-color: #2980b9;
+  }
+}
+
+// ==========================================
+// Icons
+// ==========================================
+
+.icon {
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  stroke: currentColor;
+  stroke-width: 2;
+  fill: none;
+  vertical-align: middle;
+
+  &--small {
+    width: 0.8em;
+    height: 0.8em;
+  }
+
+  &--large {
+    width: 1.5em;
+    height: 1.5em;
+  }
+}
+
+// ==========================================
+// Tooltips
+// ==========================================
+
+.tooltip {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+
+  &__text {
+    visibility: hidden;
+    width: 120px;
+    background-color: $text-color;
+    color: #ffffff;
+    text-align: center;
+    border-radius: 6px;
+    padding: $small-spacing 0;
+    position: absolute;
+    z-index: 1001;
+    bottom: 125%;
+    left: 50%;
+    margin-left: -60px;
+    opacity: 0;
+    transition: opacity 0.3s;
+
+    &::after {
+      content: "";
+      position: absolute;
+      top: 100%; /* At the bottom of the tooltip */
+      left: 50%;
+      margin-left: -5px;
+      border-width: 5px;
+      border-style: solid;
+      border-color: $text-color transparent transparent transparent;
+    }
+  }
+
+  &:hover &__text {
+    visibility: visible;
+    opacity: 1;
+  }
+}
+
+// ==========================================
+// Lists
+// ==========================================
+
+.list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+
+  &--inline {
+    display: flex;
+
+    li {
+      margin-right: $medium-spacing;
+
+      &:last-child {
+        margin-right: 0;
+      }
+    }
+  }
+
+  &--unstyled {
+    list-style: none;
+  }
+
+  &--check {
+    li {
+      position: relative;
+      padding-left: 20px;
+      margin-bottom: $small-spacing;
+
+      &::before {
+        content: '✔';
+        position: absolute;
+        left: 0;
+        color: $secondary-color;
+      }
+    }
+  }
+
+  &--numbered {
+    counter-reset: item;
+
+    li {
+      counter-increment: item;
+      margin-bottom: $small-spacing;
+
+      &::before {
+        content: counter(item) ". ";
+        font-weight: bold;
+        margin-right: $small-spacing;
+      }
+    }
+  }
+}
+
+// ==========================================
+// Responsive Utilities
+// ==========================================
+
+.hide-on-mobile {
+  @include respond-to(mobile) {
+    display: none;
+  }
+}
+
+.show-on-mobile {
+  display: none;
+
+  @include respond-to(mobile) {
+    display: block;
+  }
+}
+
+.hide-on-desktop {
+  @include respond-to(desktop) {
+    display: none;
+  }
+}
+
+.show-on-desktop {
+  display: none;
+
+  @include respond-to(desktop) {
+    display: block;
+  }
+}
+
+// ==========================================
+// Grids
+// ==========================================
+
+.grid {
+  display: flex;
+  flex-wrap: wrap;
+  margin-left: -$small-spacing;
+  margin-right: -$small-spacing;
+
+  &__column {
+    padding-left: $small-spacing;
+    padding-right: $small-spacing;
+    flex: 1;
+    max-width: 100%;
+
+    @include respond-to(tablet) {
+      max-width: 50%;
+      flex: 0 0 50%;
+    }
+
+    @include respond-to(desktop) {
+      max-width: 33.3333%;
+      flex: 0 0 33.3333%;
+    }
+
+    &--full {
+      max-width: 100%;
+      flex: 0 0 100%;
+    }
+
+    &--half {
+      @include respond-to(tablet) {
+        max-width: 50%;
+        flex: 0 0 50%;
+      }
+    }
+
+    &--third {
+      @include respond-to(desktop) {
+        max-width: 33.3333%;
+        flex: 0 0 33.3333%;
+      }
+    }
+
+    &--quarter {
+      @include respond-to(desktop) {
+        max-width: 25%;
+        flex: 0 0 25%;
+      }
+    }
+  }
+}
+
+// ==========================================
+// Icons with SVG
+// ==========================================
+
+.icon {
+  width: 1em;
+  height: 1em;
+  fill: currentColor;
+  vertical-align: middle;
+}
+
+.icon--large {
+  width: 2em;
+  height: 2em;
+}
+
+.icon--small {
+  width: 0.8em;
+  height: 0.8em;
+}
+
+// ==========================================
+// Tables
+// ==========================================
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: $large-spacing;
+
+  th,
+  td {
+    padding: $small-spacing;
+    border: 1px solid $border-color;
+    text-align: left;
+  }
+
+  th {
+    background-color: $primary-color;
+    color: #ffffff;
+  }
+
+  tr:nth-child(even) {
+    background-color: #f9f9f9;
+  }
+
+  tr:hover {
+    background-color: #f1f1f1;
+  }
+}
+
+// ==========================================
+// Forms
+// ==========================================
+
+.form {
+  &__group {
+    margin-bottom: $medium-spacing;
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__label {
+    margin-bottom: $small-spacing;
+    font-weight: bold;
+    color: $text-color;
+  }
+
+  &__input,
+  &__textarea,
+  &__select {
+    padding: $small-spacing;
+    border: 1px solid $border-color;
+    border-radius: 4px;
+    font-size: 1rem;
+
+    &:focus {
+      border-color: $primary-color;
+      outline: none;
+    }
+  }
+
+  &__button {
+    @extend .button;
+    @extend .button--primary;
+  }
+
+  &__error {
+    color: $accent-color;
+    font-size: 0.9rem;
+    margin-top: $small-spacing;
+  }
+}
+
+// ==========================================
+// Media Objects
+// ==========================================
+
+.media {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: $medium-spacing;
+
+  &__image {
+    margin-right: $medium-spacing;
+
+    img {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+    }
+  }
+
+  &__body {
+    flex: 1;
+
+    .media__heading {
+      font-size: 1.2rem;
+      margin-bottom: $small-spacing;
+      color: $primary-color;
+    }
+
+    .media__content {
+      font-size: 1rem;
+      color: $text-color;
+    }
+  }
+}
+
+// ==========================================
+// Breadcrumbs
+// ==========================================
+
+.breadcrumb {
+  list-style: none;
+  display: flex;
+  padding: 0;
+  margin: 0;
+  background-color: transparent;
+
+  li {
+    display: flex;
+    align-items: center;
+
+    a {
+      color: $primary-color;
+      text-decoration: none;
+    
+
+      &:hover {
+        color: darken($primary-color, 10%);
+      }
+    }
+
+    &::after {
+      content: '/';
+      margin: 0 $small-spacing;
+      color: $border-color;
+    }
+
+    &:last-child::after {
+      content: '';
+    }
+  }
+}
+
+// ==========================================
+// Icons with Pseudo-elements
+// ==========================================
+
+.icon-check::before {
+  content: '✔';
+  color: $secondary-color;
+}
+
+.icon-cross::before {
+  content: '✖';
+  color: $accent-color;
+}
+
+// ==========================================
+// Notifications
+// ==========================================
+
+.notification {
+  padding: $medium-spacing;
+  border-radius: 4px;
+  margin-bottom: $medium-spacing;
+  color: #ffffff;
+  font-weight: bold;
+
+  &--success {
+    background-color: $secondary-color;
+
+    &:hover {
+      background-color: darken($secondary-color, 10%);
+    }
+  }
+
+  &--error {
+    background-color: $accent-color;
+
+    &:hover {
+      background-color: darken($accent-color, 10%);
+    }
+  }
+
+  &--warning {
+    background-color: #f1c40f;
+    color: #333333;
+
+    &:hover {
+      background-color: darken(#f1c40f, 10%);
+    }
+  }
+
+  &--info {
+    background-color: #2980b9;
+
+    &:hover {
+      background-color: darken(#2980b9, 10%);
+    }
+  }
+}
+
+// ==========================================
+// Lists with Badges
+// ==========================================
+
+.list-badge {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+
+  li {
+    padding: $small-spacing 0;
+    border-bottom: 1px solid $border-color;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    &:last-child {
+      border-bottom: none;
+    }
+
+    .list-badge__text {
+      color: $text-color;
+    }
+
+    .list-badge__badge {
+      @extend .badge;
+      &--primary {
+        background-color: $primary-color;
+      }
+      &--secondary {
+        background-color: $secondary-color;
+      }
+    }
+  }
+}
+
+// ==========================================
+// Progress Bars
+// ==========================================
+
+.progress {
+  background-color: #eeeeee;
+  border-radius: 4px;
+  overflow: hidden;
+  margin-bottom: $medium-spacing;
+
+  &__bar {
+    height: 20px;
+    width: 0;
+    background-color: $primary-color;
+  
+  }
+
+  &--success {
+    .progress__bar {
+      background-color: $secondary-color;
+    }
+  }
+
+  &--error {
+    .progress__bar {
+      background-color: $accent-color;
+    }
+  }
+
+  &--warning {
+    .progress__bar {
+      background-color: #f1c40f;
+    }
+  }
+
+  &--info {
+    .progress__bar {
+      background-color: #2980b9;
+    }
+  }
+}
+
+// ==========================================
+// Carousels
+// ==========================================
+
+.carousel {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  margin-bottom: $large-spacing;
+
+  .carousel__track {
+    display: flex;
+    transition: transform 0.5s ease-in-out;
+  }
+
+  .carousel__slide {
+    min-width: 100%;
+    box-sizing: border-box;
+  }
+
+  .carousel__button {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(0, 0, 0, 0.5);
+    border: none;
+    color: #ffffff;
+    padding: $small-spacing;
+    cursor: pointer;
+    border-radius: 50%;
+
+    &:hover {
+      background-color: rgba(0, 0, 0, 0.7);
+    }
+
+    &--prev {
+      left: $small-spacing;
+    }
+
+    &--next {
+      right: $small-spacing;
+    }
+  }
+
+  .carousel__indicators {
+    position: absolute;
+    bottom: $small-spacing;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+
+    button {
+      width: 10px;
+      height: 10px;
+      background-color: #cccccc;
+      border: none;
+      border-radius: 50%;
+      margin: 0 5px;
+      cursor: pointer;
+
+      &.active {
+        background-color: $primary-color;
+      }
+
+      &:hover {
+        background-color: darken(#cccccc, 10%);
+      }
+    }
+  }
+}
+
+// ==========================================
+// Breadcrumbs
+// ==========================================
+
+.breadcrumb {
+  list-style: none;
+  display: flex;
+  padding: 0;
+  margin: 0;
+  background-color: transparent;
+
+  li {
+    display: flex;
+    align-items: center;
+
+    a {
+      color: $primary-color;
+      text-decoration: none;
+    
+
+      &:hover {
+        color: darken($primary-color, 10%);
+      }
+    }
+
+    &::after {
+      content: '/';
+      margin: 0 $small-spacing;
+      color: $border-color;
+    }
+
+    &:last-child::after {
+      content: '';
+    }
+  }
+}
+
+// ==========================================
+// Accordions
+// ==========================================
+
+.accordion {
+  border: 1px solid $border-color;
+  border-radius: 4px;
+  margin-bottom: $medium-spacing;
+
+  .accordion__item {
+    border-bottom: 1px solid $border-color;
+
+    &:last-child {
+      border-bottom: none;
+    }
+
+    .accordion__header {
+      padding: $medium-spacing;
+      background-color: $background-color;
+      cursor: pointer;
+      position: relative;
+      @include flex-center;
+      justify-content: space-between;
+
+      &:hover {
+        background-color: darken($background-color, 5%);
+      }
+
+      &::after {
+        content: '+';
+        font-size: 1.2rem;
+        position: absolute;
+        right: $medium-spacing;
+        transition: transform 0.3s;
+      }
+
+      &.active::after {
+        transform: rotate(45deg);
+      }
+    }
+
+    .accordion__body {
+      padding: $medium-spacing;
+      display: none;
+      background-color: #ffffff;
+    }
+
+    &.active {
+      .accordion__body {
+        display: block;
+      }
+
+      .accordion__header::after {
+        transform: rotate(45deg);
+      }
+    }
+  }
+}
+
+// ==========================================
+// Tabs
+// ==========================================
+
+.tabs {
+  display: flex;
+  border-bottom: 2px solid $border-color;
+  margin-bottom: $medium-spacing;
+
+  .tab {
+    padding: $small-spacing $medium-spacing;
+    cursor: pointer;
+  
+
+    &:hover {
+      color: darken($primary-color, 10%);
+    }
+
+    &.active {
+      border-bottom: 2px solid $primary-color;
+      color: $primary-color;
+      font-weight: bold;
+    }
+  }
+}
+
+.tab-content {
+  .tab-pane {
+    display: none;
+
+    &.active {
+      display: block;
+    }
+  }
+}
+
+// ==========================================
+// Tooltips
+// ==========================================
+
+.tooltip {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+
+  &__text {
+    visibility: hidden;
+    width: 120px;
+    background-color: $text-color;
+    color: #ffffff;
+    text-align: center;
+    border-radius: 6px;
+    padding: $small-spacing 0;
+    position: absolute;
+    z-index: 1001;
+    bottom: 125%;
+    left: 50%;
+    margin-left: -60px;
+    opacity: 0;
+    transition: opacity 0.3s;
+
+    &::after {
+      content: "";
+      position: absolute;
+      top: 100%; /* At the bottom of the tooltip */
+      left: 50%;
+      margin-left: -5px;
+      border-width: 5px;
+      border-style: solid;
+      border-color: $text-color transparent transparent transparent;
+    }
+  }
+
+  &:hover &__text {
+    visibility: visible;
+    opacity: 1;
+  }
+}
+
+// ==========================================
+// Animations
+// ==========================================
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.fade-in {
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+.slide-in {
+  animation: slideIn 0.5s ease-in-out;
+}
+
+// ==========================================
+// Media Queries for Responsive Design
+// ==========================================
+
+@media (max-width: $breakpoint-mobile) {
+  .container {
+    width: 100%;
+    padding: $small-spacing;
+  }
+
+  .header,
+  .footer {
+    text-align: center;
+  }
+
+  .navigation ul {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .grid__column {
+    max-width: 100%;
+    flex: 0 0 100%;
+  }
+}
+
+@media (min-width: ($breakpoint-mobile + 1)) and (max-width: $breakpoint-tablet) {
+  .grid__column {
+    max-width: 50%;
+    flex: 0 0 50%;
+  }
+
+  .navbar__menu {
+    justify-content: space-between;
+  }
+}
+
+@media (min-width: ($breakpoint-tablet + 1)) {
+  .grid__column {
+    max-width: 33.3333%;
+    flex: 0 0 33.3333%;
+  }
+
+  .navbar__menu {
+    justify-content: flex-end;
+  }
+}
+
+// ==========================================
+// Utility Classes
+// ==========================================
+
+.mt-1 {
+  margin-top: rem(8);
+}
+
+.mt-2 {
+  margin-top: rem(16);
+}
+
+.mt-3 {
+  margin-top: rem(24);
+}
+
+.mb-1 {
+  margin-bottom: rem(8);
+}
+
+.mb-2 {
+  margin-bottom: rem(16);
+}
+
+.mb-3 {
+  margin-bottom: rem(24);
+}
+
+.pt-1 {
+  padding-top: rem(8);
+}
+
+.pt-2 {
+  padding-top: rem(16);
+}
+
+.pt-3 {
+  padding-top: rem(24);
+}
+
+.pb-1 {
+  padding-bottom: rem(8);
+}
+
+.pb-2 {
+  padding-bottom: rem(16);
+}
+
+.pb-3 {
+  padding-bottom: rem(24);
+}
+
+.text-center {
+  text-align: center;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.text-left {
+  text-align: left;
+}
+
+.float-left {
+  float: left;
+}
+
+.float-right {
+  float: right;
+}
+
+.clearfix {
+  @include clearfix;
+}
+
+.display-none {
+  display: none;
+}
+
+.display-block {
+  display: block;
+}
+
+.display-flex {
+  display: flex;
+}
+
+.flex-column {
+  flex-direction: column;
+}
+
+.flex-row {
+  flex-direction: row;
+}
+
+.justify-center {
+  justify-content: center;
+}
+
+.justify-between {
+  justify-content: space-between;
+}
+
+.align-center {
+  align-items: center;
+}
+
+.align-start {
+  align-items: flex-start;
+}
+
+.align-end {
+  align-items: flex-end;
+}
+
+// ==========================================
+// Components
+// ==========================================
+
+.card-component {
+  @extend .card;
+
+  &__header {
+    @extend .card__header;
+  }
+
+  &__body {
+    @extend .card__body;
+  }
+
+  &__footer {
+    @extend .card__footer;
+  }
+}
+
+.modal-component {
+  @extend .modal;
+
+  &__content {
+    @extend .modal__content;
+  }
+
+  &__header {
+    @extend .modal__header;
+  }
+
+  &__body {
+    @extend .modal__body;
+  }
+
+  &__footer {
+    @extend .modal__footer;
+  }
+}
+
+.button-group {
+  display: flex;
+  gap: $small-spacing;
+
+  .button {
+    flex: 1;
+  }
+}
+
+// ==========================================
+// Responsive Images
+// ==========================================
+
+.responsive-img {
+  width: 100%;
+  height: auto;
+  border-radius: 4px;
+
+  &:hover {
+    transform: scale(1.05);
+  }
+}
+
+// ==========================================
+// Hero Section
+// ==========================================
+
+.hero {
+  background-image: url('../images/hero-bg.jpg');
+  background-size: cover;
+  background-position: center;
+  padding: $large-spacing 0;
+  color: #ffffff;
+  text-align: center;
+  position: relative;
+
+  &::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+  }
+
+  .hero__content {
+    position: relative;
+    z-index: 1;
+
+    .hero__title {
+      font-size: 3rem;
+      margin-bottom: $medium-spacing;
+    }
+
+    .hero__subtitle {
+      font-size: 1.5rem;
+      margin-bottom: $large-spacing;
+    }
+
+    .hero__button {
+      @extend .button;
+      @extend .button--primary;
+      font-size: 1.2rem;
+    }
+  }
+}
+
+// ==========================================
+// Pricing Tables
+// ==========================================
+
+.pricing {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: $large-spacing;
+
+  .pricing__plan {
+    background-color: #ffffff;
+    border: 1px solid $border-color;
+    border-radius: 4px;
+    padding: $medium-spacing;
+    width: 30%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    &__name {
+      font-size: 1.5rem;
+      margin-bottom: $small-spacing;
+      color: $primary-color;
+    }
+
+    &__price {
+      font-size: 2rem;
+      margin-bottom: $small-spacing;
+    }
+
+    &__features {
+      list-style: none;
+      padding: 0;
+      margin-bottom: $medium-spacing;
+      width: 100%;
+
+      li {
+        margin-bottom: $small-spacing;
+        text-align: center;
+      }
+    }
+
+    &__button {
+      @extend .button;
+      @extend .button--primary;
+      width: 100%;
+    }
+  }
+}
+
+// ==========================================
+// Testimonials
+// ==========================================
+
+.testimonials {
+  .testimonial {
+    background-color: #ffffff;
+    border-left: 4px solid $primary-color;
+    padding: $medium-spacing;
+    margin-bottom: $large-spacing;
+    position: relative;
+
+    &__quote {
+      font-style: italic;
+      margin-bottom: $small-spacing;
+    }
+
+    &__author {
+      font-weight: bold;
+      color: $primary-color;
+    }
+
+    &__avatar {
+      position: absolute;
+      top: $small-spacing;
+      right: $small-spacing;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      overflow: hidden;
+
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+    }
+  }
+}
+
+// ==========================================
+// Sidebar
+// ==========================================
+
+.sidebar {
+  background-color: #2c3e50;
+  color: #ecf0f1;
+  padding: $medium-spacing;
+  width: 250px;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  overflow-y: auto;
+
+  .sidebar__logo {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: $large-spacing;
+    text-align: center;
+  }
+
+  .sidebar__nav {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+
+    li {
+      margin-bottom: $small-spacing;
+
+      a {
+        color: #ecf0f1;
+        text-decoration: none;
+        display: block;
+        padding: $small-spacing;
+        border-radius: 4px;
+
+
+        &:hover {
+          background-color: #34495e;
+        }
+
+        &.active {
+          background-color: $primary-color;
+        }
+      }
+    }
+  }
+
+  @include respond-to(mobile) {
+    display: none;
+  }
+}
+
+// ==========================================
+// Navbar Toggle for Mobile
+// ==========================================
+
+.navbar__toggle {
+  display: none;
+  background: none;
+  border: none;
+  color: #ffffff;
+  font-size: 1.5rem;
+  cursor: pointer;
+
+  @include respond-to(mobile) {
+    display: block;
+  }
+
+  &:focus {
+    outline: none;
+  }
+}
+
+// ==========================================
+// Responsive Navigation
+// ==========================================
+
+@media (max-width: $breakpoint-mobile) {
+  .navigation {
+    display: none;
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .navigation--active {
+    display: flex;
+  }
+}
+
+// ==========================================
+// Badges
+// ==========================================
+
+.badge {
+  display: inline-block;
+  padding: 0.25em 0.4em;
+  font-size: 75%;
+  font-weight: 700;
+  line-height: 1;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: baseline;
+  border-radius: 0.25rem;
+  color: #ffffff;
+
+  &--primary {
+    background-color: $primary-color;
+  }
+
+  &--secondary {
+    background-color: $secondary-color;
+  }
+
+  &--accent {
+    background-color: $accent-color;
+  }
+
+  &--success {
+    background-color: $secondary-color;
+  }
+
+  &--error {
+    background-color: $accent-color;
+  }
+
+  &--warning {
+    background-color: #f1c40f;
+  }
+
+  &--info {
+    background-color: #2980b9;
+  }
+}
+
+// ==========================================
+// Loader
+// ==========================================
+
+.loader {
+  border: 8px solid #f3f3f3;
+  border-top: 8px solid $primary-color;
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  animation: spin 2s linear infinite;
+
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+}
+
+// ==========================================
+// Icons using Pseudo-elements
+// ==========================================
+
+.icon-home::before {
+  content: '\f015'; // FontAwesome home icon
+}
+
+.icon-user::before {
+  content: '\f007'; // FontAwesome user icon
+}
+
+.icon-cog::before {
+  content: '\f013'; // FontAwesome cog icon
+}
+
+// ==========================================
+// Notifications
+// ==========================================
+
+.notification {
+  padding: $medium-spacing;
+  border-radius: 4px;
+  margin-bottom: $medium-spacing;
+  color: #ffffff;
+  font-weight: bold;
+
+  &--success {
+    background-color: $secondary-color;
+
+    &:hover {
+      background-color: darken($secondary-color, 10%);
+    }
+  }
+
+  &--error {
+    background-color: $accent-color;
+
+    &:hover {
+      background-color: darken($accent-color, 10%);
+    }
+  }
+
+  &--warning {
+    background-color: #f1c40f;
+    color: #333333;
+
+    &:hover {
+      background-color: darken(#f1c40f, 10%);
+    }
+  }
+
+  &--info {
+    background-color: #2980b9;
+
+    &:hover {
+      background-color: darken(#2980b9, 10%);
+    }
+  }
+}
+
+// ==========================================
+// Tooltips
+// ==========================================
+
+.tooltip {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+
+  &__text {
+    visibility: hidden;
+    width: 120px;
+    background-color: $text-color;
+    color: #ffffff;
+    text-align: center;
+    border-radius: 6px;
+    padding: $small-spacing 0;
+    position: absolute;
+    z-index: 1001;
+    bottom: 125%;
+    left: 50%;
+    margin-left: -60px;
+    opacity: 0;
+    transition: opacity 0.3s;
+
+    &::after {
+      content: "";
+      position: absolute;
+      top: 100%; /* At the bottom of the tooltip */
+      left: 50%;
+      margin-left: -5px;
+      border-width: 5px;
+      border-style: solid;
+      border-color: $text-color transparent transparent transparent;
+    }
+  }
+
+  &:hover &__text {
+    visibility: visible;
+    opacity: 1;
+  }
+}
+
+// ==========================================
+// Animations
+// ==========================================
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.fade-in {
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+.slide-in {
+  animation: slideIn 0.5s ease-in-out;
+}
+
+// ==========================================
+// Responsive Utilities
+// ==========================================
+
+.hide-on-mobile {
+  @include respond-to(mobile) {
+    display: none;
+  }
+}
+
+.show-on-mobile {
+  display: none;
+
+  @include respond-to(mobile) {
+    display: block;
+  }
+}
+
+.hide-on-desktop {
+  @include respond-to(desktop) {
+    display: none;
+  }
+}
+
+.show-on-desktop {
+  display: none;
+
+  @include respond-to(desktop) {
+    display: block;
+  }
+}
+
+// ==========================================
+// Alerts
+// ==========================================
+
+.alert {
+  padding: $medium-spacing;
+  border-radius: 4px;
+  margin-bottom: $large-spacing;
+  font-weight: bold;
+
+  &--success {
+    background-color: $secondary-color;
+    color: #ffffff;
+
+    &:hover {
+      background-color: darken($secondary-color, 10%);
+    }
+  }
+
+  &--error {
+    background-color: $accent-color;
+    color: #ffffff;
+
+    &:hover {
+      background-color: darken($accent-color, 10%);
+    }
+  }
+
+  &--warning {
+    background-color: #f1c40f;
+    color: #333333;
+
+    &:hover {
+      background-color: darken(#f1c40f, 10%);
+    }
+  }
+
+  &--info {
+    background-color: #2980b9;
+    color: #ffffff;
+
+    &:hover {
+      background-color: darken(#2980b9, 10%);
+    }
+  }
+}
+
+// ==========================================
+// Hero Section
+// ==========================================
+
+.hero {
+  background-image: url('../images/hero-bg.jpg');
+  background-size: cover;
+  background-position: center;
+  padding: $large-spacing 0;
+  color: #ffffff;
+  text-align: center;
+  position: relative;
+
+  &::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+  }
+
+  .hero__content {
+    position: relative;
+    z-index: 1;
+
+    .hero__title {
+      font-size: 3rem;
+      margin-bottom: $medium-spacing;
+    }
+
+    .hero__subtitle {
+      font-size: 1.5rem;
+      margin-bottom: $large-spacing;
+    }
+
+    .hero__button {
+      @extend .button;
+      @extend .button--primary;
+      font-size: 1.2rem;
+    }
+  }
+}
+
+// ==========================================
+// Pricing Tables
+// ==========================================
+
+.pricing {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: $large-spacing;
+
+  .pricing__plan {
+    background-color: #ffffff;
+    border: 1px solid $border-color;
+    border-radius: 4px;
+    padding: $medium-spacing;
+    width: 30%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    &__name {
+      font-size: 1.5rem;
+      margin-bottom: $small-spacing;
+      color: $primary-color;
+    }
+
+    &__price {
+      font-size: 2rem;
+      margin-bottom: $small-spacing;
+    }
+
+    &__features {
+      list-style: none;
+      padding: 0;
+      margin-bottom: $medium-spacing;
+      width: 100%;
+
+      li {
+        margin-bottom: $small-spacing;
+        text-align: center;
+      }
+    }
+
+    &__button {
+      @extend .button;
+      @extend .button--primary;
+      width: 100%;
+    }
+  }
+}
+
+// ==========================================
+// Testimonials
+// ==========================================
+
+.testimonials {
+  .testimonial {
+    background-color: #ffffff;
+    border-left: 4px solid $primary-color;
+    padding: $medium-spacing;
+    margin-bottom: $large-spacing;
+    position: relative;
+
+    &__quote {
+      font-style: italic;
+      margin-bottom: $small-spacing;
+    }
+
+    &__author {
+      font-weight: bold;
+      color: $primary-color;
+    }
+
+    &__avatar {
+      position: absolute;
+      top: $small-spacing;
+      right: $small-spacing;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      overflow: hidden;
+
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+    }
+  }
+}
+
+// ==========================================
+// Sidebar
+// ==========================================
+
+.sidebar {
+  background-color: #2c3e50;
+  color: #ecf0f1;
+  padding: $medium-spacing;
+  width: 250px;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  overflow-y: auto;
+
+  .sidebar__logo {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: $large-spacing;
+    text-align: center;
+  }
+
+  .sidebar__nav {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+
+    li {
+      margin-bottom: $small-spacing;
+
+      a {
+        color: #ecf0f1;
+        text-decoration: none;
+        display: block;
+        padding: $small-spacing;
+        border-radius: 4px;
+
+
+        &:hover {
+          background-color: #34495e;
+        }
+
+        &.active {
+          background-color: $primary-color;
+        }
+      }
+    }
+  }
+
+  @include respond-to(mobile) {
+    display: none;
+  }
+}
+
+// ==========================================
+// Navbar Toggle for Mobile
+// ==========================================
+
+.navbar__toggle {
+  display: none;
+  background: none;
+  border: none;
+  color: #ffffff;
+  font-size: 1.5rem;
+  cursor: pointer;
+
+  @include respond-to(mobile) {
+    display: block;
+  }
+
+  &:focus {
+    outline: none;
+  }
+}
+
+// ==========================================
+// Responsive Navigation
+// ==========================================
+
+@media (max-width: $breakpoint-mobile) {
+  .navigation {
+    display: none;
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .navigation--active {
+    display: flex;
+  }
+}
+
+// ==========================================
+// Animations
+// ==========================================
+
+@keyframes bounce {
+  0%, 20%, 50%, 80%, 100% {
+    transform: translateY(0);
+  } 
+  40% {
+    transform: translateY(-10px);
+  } 
+  60% {
+    transform: translateY(-5px);
+  }
+}
+
+.bounce {
+  animation: bounce 2s infinite;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 40px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+.fade-in-up {
+  animation: fadeInUp 0.5s ease-out forwards;
+}
+
+// ==========================================
+// Utility Classes
+// ==========================================
+
+.mt-1 {
+  margin-top: rem(8);
+}
+
+.mt-2 {
+  margin-top: rem(16);
+}
+
+.mt-3 {
+  margin-top: rem(24);
+}
+
+.mb-1 {
+  margin-bottom: rem(8);
+}
+
+.mb-2 {
+  margin-bottom: rem(16);
+}
+
+.mb-3 {
+  margin-bottom: rem(24);
+}
+
+.pt-1 {
+  padding-top: rem(8);
+}
+
+.pt-2 {
+  padding-top: rem(16);
+}
+
+.pt-3 {
+  padding-top: rem(24);
+}
+
+.pb-1 {
+  padding-bottom: rem(8);
+}
+
+.pb-2 {
+  padding-bottom: rem(16);
+}
+
+.pb-3 {
+  padding-bottom: rem(24);
+}
+
+.text-center {
+  text-align: center;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.text-left {
+  text-align: left;
+}
+
+.float-left {
+  float: left;
+}
+
+.float-right {
+  float: right;
+}
+
+.clearfix {
+  @include clearfix;
+}
+
+.display-none {
+  display: none;
+}
+
+.display-block {
+  display: block;
+}
+
+.display-flex {
+  display: flex;
+}
+
+.flex-column {
+  flex-direction: column;
+}
+
+.flex-row {
+  flex-direction: row;
+}
+
+.justify-center {
+  justify-content: center;
+}
+
+.justify-between {
+  justify-content: space-between;
+}
+
+.align-center {
+  align-items: center;
+}
+
+.align-start {
+  align-items: flex-start;
+}
+
+.align-end {
+  align-items: flex-end;
+}
+
+// ==========================================
+// Grids
+// ==========================================
+
+.grid {
+  display: flex;
+  flex-wrap: wrap;
+  margin-left: -$small-spacing;
+  margin-right: -$small-spacing;
+
+  &__column {
+    padding-left: $small-spacing;
+    padding-right: $small-spacing;
+    flex: 1;
+    max-width: 100%;
+
+    @include respond-to(tablet) {
+      max-width: 50%;
+      flex: 0 0 50%;
+    }
+
+    @include respond-to(desktop) {
+      max-width: 33.3333%;
+      flex: 0 0 33.3333%;
+    }
+
+    &--full {
+      max-width: 100%;
+      flex: 0 0 100%;
+    }
+
+    &--half {
+      @include respond-to(tablet) {
+        max-width: 50%;
+        flex: 0 0 50%;
+      }
+    }
+
+    &--third {
+      @include respond-to(desktop) {
+        max-width: 33.3333%;
+        flex: 0 0 33.3333%;
+      }
+    }
+
+    &--quarter {
+      @include respond-to(desktop) {
+        max-width: 25%;
+        flex: 0 0 25%;
+      }
+    }
+  }
+}
+
+// ==========================================
+// Hero Section
+// ==========================================
+
+.hero {
+  background-image: url('../images/hero-bg.jpg');
+  background-size: cover;
+  background-position: center;
+  padding: $large-spacing 0;
+  color: #ffffff;
+  text-align: center;
+  position: relative;
+
+  &::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+  }
+
+  .hero__content {
+    position: relative;
+    z-index: 1;
+
+    .hero__title {
+      font-size: 3rem;
+      margin-bottom: $medium-spacing;
+    }
+
+    .hero__subtitle {
+      font-size: 1.5rem;
+      margin-bottom: $large-spacing;
+    }
+
+    .hero__button {
+      @extend .button;
+      @extend .button--primary;
+      font-size: 1.2rem;
+    }
+  }
+}
+
+// ==========================================
+// Pricing Tables
+// ==========================================
+
+.pricing {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: $large-spacing;
+
+  .pricing__plan {
+    background-color: #ffffff;
+    border: 1px solid $border-color;
+    border-radius: 4px;
+    padding: $medium-spacing;
+    width: 30%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    &__name {
+      font-size: 1.5rem;
+      margin-bottom: $small-spacing;
+      color: $primary-color;
+    }
+
+    &__price {
+      font-size: 2rem;
+      margin-bottom: $small-spacing;
+    }
+
+    &__features {
+      list-style: none;
+      padding: 0;
+      margin-bottom: $medium-spacing;
+      width: 100%;
+
+      li {
+        margin-bottom: $small-spacing;
+        text-align: center;
+      }
+    }
+
+    &__button {
+      @extend .button;
+      @extend .button--primary;
+      width: 100%;
+    }
+  }
+}
+
+// ==========================================
+// Testimonials
+// ==========================================
+
+.testimonials {
+  .testimonial {
+    background-color: #ffffff;
+    border-left: 4px solid $primary-color;
+    padding: $medium-spacing;
+    margin-bottom: $large-spacing;
+    position: relative;
+
+    &__quote {
+      font-style: italic;
+      margin-bottom: $small-spacing;
+    }
+
+    &__author {
+      font-weight: bold;
+      color: $primary-color;
+    }
+
+    &__avatar {
+      position: absolute;
+      top: $small-spacing;
+      right: $small-spacing;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      overflow: hidden;
+
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+    }
+  }
+}
+
+// ==========================================
+// Sidebar
+// ==========================================
+
+.sidebar {
+  background-color: #2c3e50;
+  color: #ecf0f1;
+  padding: $medium-spacing;
+  width: 250px;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  overflow-y: auto;
+
+  .sidebar__logo {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: $large-spacing;
+    text-align: center;
+  }
+
+  .sidebar__nav {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+
+    li {
+      margin-bottom: $small-spacing;
+
+      a {
+        color: #ecf0f1;
+        text-decoration: none;
+        display: block;
+        padding: $small-spacing;
+        border-radius: 4px;
+
+        &:hover {
+          background-color: #34495e;
+        }
+
+        &.active {
+          background-color: $primary-color;
+        }
+      }
+    }
+  }
+
+  @include respond-to(mobile) {
+    display: none;
+  }
+}
+
+// ==========================================
+// Navbar Toggle for Mobile
+// ==========================================
+
+.navbar__toggle {
+  display: none;
+  background: none;
+  border: none;
+  color: #ffffff;
+  font-size: 1.5rem;
+  cursor: pointer;
+
+  @include respond-to(mobile) {
+    display: block;
+  }
+
+  &:focus {
+    outline: none;
+  }
+}
+
+// ==========================================
+// Responsive Navigation
+// ==========================================
+
+@media (max-width: $breakpoint-mobile) {
+  .navigation {
+    display: none;
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .navigation--active {
+    display: flex;
+  }
+}
+
+// ==========================================
+// Animations
+// ==========================================
+
+@keyframes bounce {
+  0%, 20%, 50%, 80%, 100% {
+    transform: translateY(0);
+  } 
+  40% {
+    transform: translateY(-10px);
+  } 
+  60% {
+    transform: translateY(-5px);
+  }
+}
+
+.bounce {
+  animation: bounce 2s infinite;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 40px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+.fade-in-up {
+  animation: fadeInUp 0.5s ease-out forwards;
+}
+
+// ==========================================
+// Loader
+// ==========================================
+
+.loader {
+  border: 8px solid #f3f3f3;
+  border-top: 8px solid $primary-color;
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  animation: spin 2s linear infinite;
+
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+}
+
+// ==========================================
+// Media Objects
+// ==========================================
+
+.media {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: $medium-spacing;
+
+  &__image {
+    margin-right: $medium-spacing;
+
+    img {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+    }
+  }
+
+  &__body {
+    flex: 1;
+
+    .media__heading {
+      font-size: 1.2rem;
+      margin-bottom: $small-spacing;
+      color: $primary-color;
+    }
+
+    .media__content {
+      font-size: 1rem;
+      color: $text-color;
+    }
+  }
+}
+
+// ==========================================
+// Breadcrumbs
+// ==========================================
+
+.breadcrumb {
+  list-style: none;
+  display: flex;
+  padding: 0;
+  margin: 0;
+  background-color: transparent;
+
+  li {
+    display: flex;
+    align-items: center;
+
+    a {
+      color: $primary-color;
+      text-decoration: none;
+
+      &:hover {
+        color: darken($primary-color, 10%);
+      }
+    }
+
+    &::after {
+      content: '/';
+      margin: 0 $small-spacing;
+      color: $border-color;
+    }
+
+    &:last-child::after {
+      content: '';
+    }
+  }
+}
+
+// ==========================================
+// Carousels
+// ==========================================
+
+.carousel {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  margin-bottom: $large-spacing;
+
+  .carousel__track {
+    display: flex;
+    transition: transform 0.5s ease-in-out;
+  }
+
+  .carousel__slide {
+    min-width: 100%;
+    box-sizing: border-box;
+  }
+
+  .carousel__button {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(0, 0, 0, 0.5);
+    border: none;
+    color: #ffffff;
+    padding: $small-spacing;
+    cursor: pointer;
+    border-radius: 50%;
+
+    &:hover {
+      background-color: rgba(0, 0, 0, 0.7);
+    }
+
+    &--prev {
+      left: $small-spacing;
+    }
+
+    &--next {
+      right: $small-spacing;
+    }
+  }
+
+  .carousel__indicators {
+    position: absolute;
+    bottom: $small-spacing;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+
+    button {
+      width: 10px;
+      height: 10px;
+      background-color: #cccccc;
+      border: none;
+      border-radius: 50%;
+      margin: 0 5px;
+      cursor: pointer;
+
+      &.active {
+        background-color: $primary-color;
+      }
+
+      &:hover {
+        background-color: darken(#cccccc, 10%);
+      }
+    }
+  }
+}
+
+// ==========================================
+// Responsive Images
+// ==========================================
+
+.responsive-img {
+  width: 100%;
+  height: auto;
+  border-radius: 4px;
+
+  &:hover {
+    transform: scale(1.05);
+  }
+}
+
+// ==========================================
+// List Styles
+// ==========================================
+
+.list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+
+  &--inline {
+    display: flex;
+
+    li {
+      margin-right: $medium-spacing;
+
+      &:last-child {
+        margin-right: 0;
+      }
+    }
+  }
+
+  &--unstyled {
+    list-style: none;
+  }
+
+  &--check {
+    li {
+      position: relative;
+      padding-left: 20px;
+      margin-bottom: $small-spacing;
+
+      &::before {
+        content: '✔';
+        position: absolute;
+        left: 0;
+        color: $secondary-color;
+      }
+    }
+  }
+
+  &--numbered {
+    counter-reset: item;
+
+    li {
+      counter-increment: item;
+      margin-bottom: $small-spacing;
+
+      &::before {
+        content: counter(item) ". ";
+        font-weight: bold;
+        margin-right: $small-spacing;
+      }
+    }
+  }
+}
+
+// ==========================================
+// Dropdowns
+// ==========================================
+
+.dropdown {
+  position: relative;
+  display: inline-block;
+
+  &__button {
+    @extend .button;
+    @extend .button--secondary;
+  }
+
+  &__content {
+    display: none;
+    position: absolute;
+    background-color: #ffffff;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+    border-radius: 4px;
+
+    a {
+      color: $text-color;
+      padding: $small-spacing 16px;
+      text-decoration: none;
+      display: block;
+
+      &:hover {
+        background-color: $background-color;
+      }
+    }
+  }
+
+  &:hover &__content {
+    display: block;
+  }
+}
+
+// ==========================================
+// Tables with Striped Rows
+// ==========================================
+
+.table-striped {
+  tr:nth-child(even) {
+    background-color: #f2f2f2;
+  }
+}
+
+.table-hover {
+  tr:hover {
+    background-color: #ddd;
+  }
+}
+
+// ==========================================
+// Lists with Icons
+// ==========================================
+
+.list-icons {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+
+  li {
+    position: relative;
+    padding-left: 25px;
+    margin-bottom: $small-spacing;
+
+    &::before {
+      content: '•';
+      position: absolute;
+      left: 0;
+      color: $primary-color;
+    }
+  }
+}
+
+// ==========================================
+// Code Blocks
+// ==========================================
+
+.code-block {
+  background-color: #2d2d2d;
+  color: #f8f8f2;
+  padding: $medium-spacing;
+  border-radius: 4px;
+  overflow-x: auto;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 0.9rem;
+
+  pre {
+    margin: 0;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+  }
+
+  code {
+    background-color: #3c3c3c;
+    padding: 2px 4px;
+    border-radius: 4px;
+  }
+}
+
+// ==========================================
+// Icons with Font Awesome
+// ==========================================
+
+.icon-fa {
+  font-family: 'Font Awesome 5 Free';
+  font-weight: 900;
+
+  &--home::before {
+    content: "\f015";
+  }
+
+  &--user::before {
+    content: "\f007";
+  }
+
+  &--cog::before {
+    content: "\f013";
+  }
+
+  &--check::before {
+    content: "\f00c";
+  }
+
+  &--times::before {
+    content: "\f00d";
+  }
+}
