@@ -288,7 +288,7 @@ namespace Sass {
     }
     // 다른 ruleset과 구분하기 위해 linefeed
     append_string("\n");
-    // @media 등 ruleset의 계층구조가 남아있을 시 내부 Ruleset에서 indentation 추가 적용
+    // @media 등 ruleset의 계층구조가 남아있을 시 내부 Ruleset에서 오른쪽 괄호에 indentation 추가 적용
     // Global Scope인 경우에는 indentation값이 0이므로 없는 코드와 동일함.
     append_indentation();
     // right brace 추가
