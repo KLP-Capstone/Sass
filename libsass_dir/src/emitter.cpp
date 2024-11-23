@@ -286,7 +286,7 @@ namespace Sass {
     } else {
       append_optional_space();
     }
-    append_string("}");
+    append_string("\n}");
     if (node) add_close_mapping(node);
     append_optional_linefeed();
     if (indentation != 0) return;
