@@ -129,6 +129,7 @@ namespace Sass {
     }
     // create new block and push to the selector stack
     Block_Obj block = SASS_MEMORY_NEW(Block, pstate, 0, is_root);
+    std::cout << "This is " << block->to_string() << std::endl;
 
     // left brace 이후로 새로운 블록이기 때문에 block stack에 block을 추가함
     block_stack.push_back(block);
