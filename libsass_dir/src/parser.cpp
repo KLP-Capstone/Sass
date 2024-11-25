@@ -168,7 +168,6 @@ namespace Sass {
   // lexing하면서 parsing (lexing 다하고 parsing하는게 아님. lexing을 하면서 parsing을 같이 진행함)
   bool Parser::parse_block_nodes(bool is_root)
   {
-    //std::cout << "is_root: " << is_root << ", Hello World!" << std::endl;
     // loop until end of string
     while (position < end) {
       // we should be able to refactor this
@@ -986,7 +985,6 @@ namespace Sass {
     }
     bool is_indented = true; // sass 문법이라서 우리는 관여하지 않을 것
     const sass::string property(lexed);
-    //std::cout << "Hello, " << property << std::endl;
     if (!lex_css< one_plus< exactly<':'> > >()) error("property \"" + escape_string(property)  + "\" must be followed by a ':'");
     // custom variable은 colon 뒤에 comment, semi colon 붙여도 되는데 non-custom variable은 불가능함
     // ex) background-color: /* */; -> error,        --sadf: /* asdf */; -> non error

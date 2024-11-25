@@ -131,9 +131,7 @@ namespace Sass {
       return;
     }
 
-    if (output_style() == NESTED) {
-      indentation += r->tabs();
-    }
+    //if (output_style() == NESTED) indentation += r->tabs();
     if (opt.source_comments) {
       sass::ostream ss;
       append_indentation();
@@ -172,7 +170,7 @@ namespace Sass {
         stm->perform(this);
       }
     }
-    if (output_style() == NESTED) indentation -= r->tabs();
+    //if (output_style() == NESTED) indentation -= r->tabs();
     append_scope_closer(b);
 
   }
